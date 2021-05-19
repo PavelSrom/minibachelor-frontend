@@ -2,8 +2,13 @@ import { render } from 'react-dom'
 import './index.css'
 import { App } from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { AuthProvider } from './contexts/auth'
 
-const app = <App />
+const app = (
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+)
 
 render(app, document.getElementById('root'))
 
