@@ -1,13 +1,16 @@
 import { render } from 'react-dom'
+import { StylesProvider } from '@material-ui/core'
 import './index.css'
 import { App } from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { AuthProvider } from './contexts/auth'
 
 const app = (
-  <AuthProvider>
-    <App />
-  </AuthProvider>
+  <StylesProvider injectFirst>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </StylesProvider>
 )
 
 render(app, document.getElementById('root'))
