@@ -40,7 +40,7 @@ export const Login: React.FC = () => {
       await login(values)
       enqueueSnackbar('Signed in', { variant: 'success' })
     } catch (err) {
-      enqueueSnackbar(err.response.data.message ?? 'Unable to sign in', {
+      enqueueSnackbar(err?.response?.data?.message || 'Unable to sign in', {
         variant: 'error',
       })
       setIsSubmitting(false)
