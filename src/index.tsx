@@ -9,6 +9,8 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { AuthProvider } from './contexts/auth'
 import { queryClient } from './utils/query-client'
 
+require('./utils/axios-interceptor')
+
 const app = (
   <QueryClientProvider client={queryClient}>
     <StylesProvider injectFirst>

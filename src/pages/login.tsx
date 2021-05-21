@@ -67,11 +67,12 @@ export const Login: React.FC = () => {
               <TextField
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
+                        edge="end"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <Visibility /> : <VisibilityOff />}
