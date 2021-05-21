@@ -38,6 +38,7 @@ export const TextField: React.ForwardRefExoticComponent<Props> = forwardRef<
         {({
           field: { onChange, ...fieldRest },
           meta,
+          form,
         }: FieldProps | FastFieldProps) => (
           <MuiTextField
             ref={ref}
@@ -51,9 +52,10 @@ export const TextField: React.ForwardRefExoticComponent<Props> = forwardRef<
             onChange={e => {
               onChange(e)
               onAfterChange?.()
+              form.setFieldTouched(name, true)
             }}
-            error={!!meta.error}
-            helperText={meta.error}
+            error={!!meta.error && meta.touched}
+            helperText={meta.touched ? meta.error : ''}
             FormHelperTextProps={{
               ...rest.FormHelperTextProps,
               className: 'absolute -bottom-5',
