@@ -1,4 +1,6 @@
 import { Switch, Route } from 'react-router-dom'
+import { PrivateRoute } from './hoc/private-route'
+// pages
 import { ColleagueDetail } from './pages/colleague-detail'
 import { Dashboard } from './pages/dashboard'
 import { Home } from './pages/home'
@@ -13,10 +15,10 @@ export const App: React.FC = () => {
       <Route exact path="/" component={Home} />
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
-      <Route exact path="/dashboard" component={Dashboard} />
-      <Route exact path="/questions" component={Questions} />
-      <Route exact path="/projects" component={Projects} />
-      <Route exact path="/colleague/:id" component={ColleagueDetail} />
+      <PrivateRoute exact path="/dashboard" component={Dashboard} />
+      <PrivateRoute exact path="/questions" component={Questions} />
+      <PrivateRoute exact path="/projects" component={Projects} />
+      <PrivateRoute exact path="/colleague/:id" component={ColleagueDetail} />
     </Switch>
   )
 }
