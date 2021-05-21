@@ -123,17 +123,14 @@ export const AuthProvider: React.FC = ({ children }) => {
     [isAuthenticated, user]
   )
 
-  return (
-    <AuthContext.Provider value={value}>
-      {status === 'pending' ? (
-        <Backdrop open style={{ color: '#fff' }}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      ) : (
-        children
-      )}
-    </AuthContext.Provider>
-  )
+  if (status === 'pending')
+    return (
+      <Backdrop open style={{ color: '#fff' }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = (): ContextProps => {
