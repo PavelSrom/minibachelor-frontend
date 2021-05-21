@@ -1,0 +1,101 @@
+import { useState } from 'react'
+import { Redirect } from 'react-router-dom'
+import { IconButton, InputAdornment, Paper } from '@material-ui/core'
+import Visibility from '@material-ui/icons/Visibility'
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import { useSnackbar } from 'notistack'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import { useAuth } from '../contexts/auth'
+import { Text } from '../styleguide/text'
+import { TextField } from '../styleguide/text-field'
+import { LoginPayload } from '../types/payloads'
+import { Button } from '../styleguide/button'
+
+const initialValues = {
+  email: '',
+  password: '',
+}
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Must be an email')
+    .required('This field is required'),
+  password: Yup.string()
+    .min(6, 'At least 6 characters')
+    .max(20, 'Max 20 characters')
+    .required('This field is required'),
+})
+
+export const Login: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const { isAuthenticated, login } = useAuth()
+
+  const handleSubmit = async (values: LoginPayload): Promise<void> => {
+    setIsSubmitting(true)
+
+    try {
+      await login(values)
+      enqueueSnackbar('Signed in', { variant: 'success' })
+    } catch (err) {
+      enqueueSnackbar(err.response.data.message ?? 'Unable to sign in', {
+        variant: 'error',
+      })
+      setIsSubmitting(false)
+    }
+  }
+
+  if (isAuthenticated) return <Redirect to="/dashboard" />
+
+  return (
+    <section className="min-h-screen flex">
+      <div className="w-1/2 px-8 flex flex-col justify-center items-center">
+        <Paper className="p-8">
+          <Text variant="h1" className="mb-16 text-center">
+            Sign in to your account
+          </Text>
+
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            <Form className="space-y-8">
+              <TextField name="email" label="Email" />
+              <TextField
+                name="password"
+                label="Password"
+                type="password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Button
+                fullWidth
+                type="submit"
+                color="primary"
+                loading={isSubmitting}
+              >
+                Sign in
+              </Button>
+            </Form>
+          </Formik>
+        </Paper>
+      </div>
+      <div
+        className="w-1/2 bg-cover bg-left"
+        style={{ backgroundImage: 'url(/images/banner.jpg)' }}
+      />
+    </section>
+  )
+}
