@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
 
-axios.defaults.baseURL = 'http://minibachelor.herokuapp.com/api'
-
 axios.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
     const accessToken: string | null = localStorage.getItem('x-auth-token')
