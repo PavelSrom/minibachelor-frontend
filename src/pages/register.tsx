@@ -7,10 +7,8 @@ import { useSnackbar } from 'notistack'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { useAuth } from '../contexts/auth'
-import { Text } from '../styleguide/text'
-import { TextField } from '../styleguide/text-field'
+import { Text, TextField, Button } from '../styleguide'
 import { RegisterPayload } from '../types/payloads'
-import { Button } from '../styleguide/button'
 import { schools } from '../utils/schools'
 
 const initialValues = {
