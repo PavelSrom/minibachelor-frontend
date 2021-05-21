@@ -1,4 +1,48 @@
-export type UserDTO = {}
-export type QuestionDTO = {}
-export type ProjectDTO = {}
-export type CommentDTO = {}
+import { Programme, School } from '.'
+
+export type UserDTO = {
+  id: string
+  name: string
+  surname: string
+  email: string
+  role: 'student' | 'teacher'
+  school: School
+  programme: Programme
+}
+
+export type QuestionDTO = {
+  id: string
+  userId: string
+  userName: string
+  userSurname: string
+  school: School
+  programme: Programme
+  title: string
+  description: string
+  isPublic: boolean
+  createdAt: string
+}
+
+export type ProjectDTO = {
+  id: string
+  userId: string
+  userName: string
+  userSurname: string
+  school: School
+  programme: Programme
+  title: string
+  description?: string
+  demoUrl: string
+  otherUrl?: string
+  createdAt: string
+}
+
+export type CommentDTO = {
+  id: string
+  userId: string
+  entityId: string
+  userName: string
+  userSurname: string
+  text: string
+  createdAt: string
+}
