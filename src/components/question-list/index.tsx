@@ -6,16 +6,27 @@ import { QuestionRow } from '../question-row'
 
 type Props = {
   questions: QuestionDTO[]
+  onDetailClick: (q: QuestionDTO) => void
+  detailOpen: boolean
 }
 
-export const QuestionList: React.FC<Props> = ({ questions }) => {
+export const QuestionList: React.FC<Props> = ({
+  questions,
+  onDetailClick,
+  detailOpen,
+}) => {
   const now = new Date()
 
   const renderQuestions = (questions: QuestionDTO[]) => {
     return (
       <div className="space-y-2">
         {questions.map(q => (
-          <QuestionRow key={q._id} question={q} />
+          <QuestionRow
+            key={q._id}
+            question={q}
+            onDetailClick={() => onDetailClick(q)}
+            detailOpen={detailOpen}
+          />
         ))}
       </div>
     )

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import clsx from 'clsx'
 import {
   Container,
   Paper,
@@ -7,19 +8,28 @@ import {
   TextField,
   Divider,
   MenuItem,
+  Fab,
+  Tooltip,
 } from '@material-ui/core'
 import Search from '@material-ui/icons/Search'
 import Close from '@material-ui/icons/Close'
+import Add from '@material-ui/icons/Add'
 import { useQuestions } from '../hooks/questions'
 import { QuestionList } from '../components/question-list'
+import { QuestionDTO } from '../types/api'
+import { QuestionDetail } from '../components/question-detail'
+import { Text } from '../styleguide'
 
 export const Questions: React.FC = () => {
+  const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
   const [sortBy, setSortBy] = useState<string>('newest')
 
   const questionsQuery = useQuestions()
 
   return (
     <Container maxWidth="lg" className="py-8">
+      <Text variant="h1">People's questions</Text>
+      <Text className="mt-2 mb-16">Lorem ipsum</Text>
       <div className="flex justify-between items-end">
         <Paper
           component="form"
@@ -57,8 +67,32 @@ export const Questions: React.FC = () => {
       {questionsQuery.isError && <p>Error :(</p>}
 
       {questionsQuery.isSuccess && questionsQuery.data && (
-        <QuestionList questions={questionsQuery.data} />
+        <div className="flex">
+          <div
+            className={clsx('transition-all duration-250', {
+              'w-full': !detailOpen,
+              'w-1/2': detailOpen,
+            })}
+          >
+            <QuestionList
+              questions={questionsQuery.data}
+              onDetailClick={q => setDetailOpen(q)}
+              detailOpen={!!detailOpen}
+            />
+          </div>
+
+          <QuestionDetail
+            question={detailOpen}
+            onClose={() => setDetailOpen(undefined)}
+          />
+        </div>
       )}
+
+      <Tooltip title="Ask question" placement="left">
+        <Fab color="secondary" className="fixed bottom-4 right-4">
+          <Add />
+        </Fab>
+      </Tooltip>
     </Container>
   )
 }
