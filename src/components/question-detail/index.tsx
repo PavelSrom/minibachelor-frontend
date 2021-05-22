@@ -13,10 +13,9 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
   return (
     <Grow in={!!question}>
       <div
-        className={clsx({
+        className={clsx('self-start', {
           // change classes here to fix quickview tooltip behavior
-          'ml-8 self-start': true,
-          'w-1/2 visible': !!question,
+          'w-1/2 visible ml-8': !!question,
           'w-0 invisible': !question,
         })}
       >
