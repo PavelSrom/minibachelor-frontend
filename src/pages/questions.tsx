@@ -13,15 +13,17 @@ import {
 } from '@material-ui/core'
 import Search from '@material-ui/icons/Search'
 import Close from '@material-ui/icons/Close'
-import Add from '@material-ui/icons/Add'
+import ContactSupport from '@material-ui/icons/ContactSupport'
 import { useQuestions } from '../hooks/questions'
 import { QuestionList } from '../components/question-list'
 import { QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { Text } from '../styleguide'
+import { NewQuestionModal } from '../components/new-question-modal'
 
 export const Questions: React.FC = () => {
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [sortBy, setSortBy] = useState<string>('newest')
 
   const questionsQuery = useQuestions()
@@ -88,9 +90,15 @@ export const Questions: React.FC = () => {
         </div>
       )}
 
+      <NewQuestionModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
       <Tooltip title="Ask question" placement="left">
-        <Fab color="secondary" className="fixed bottom-4 right-4">
-          <Add />
+        <Fab
+          color="secondary"
+          className="fixed bottom-4 right-4"
+          onClick={() => setModalOpen(true)}
+        >
+          <ContactSupport />
         </Fab>
       </Tooltip>
     </Container>
