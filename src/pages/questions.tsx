@@ -19,9 +19,11 @@ import { QuestionList } from '../components/question-list'
 import { QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { Text } from '../styleguide'
+import { NewQuestionModal } from '../components/new-question-modal'
 
 export const Questions: React.FC = () => {
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [sortBy, setSortBy] = useState<string>('newest')
 
   const questionsQuery = useQuestions()
@@ -88,8 +90,14 @@ export const Questions: React.FC = () => {
         </div>
       )}
 
+      <NewQuestionModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
       <Tooltip title="Ask question" placement="left">
-        <Fab color="secondary" className="fixed bottom-4 right-4">
+        <Fab
+          color="secondary"
+          className="fixed bottom-4 right-4"
+          onClick={() => setModalOpen(true)}
+        >
           <Add />
         </Fab>
       </Tooltip>
