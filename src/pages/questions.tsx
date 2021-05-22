@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import Search from '@material-ui/icons/Search'
 import Close from '@material-ui/icons/Close'
-import Add from '@material-ui/icons/Add'
+import ContactSupport from '@material-ui/icons/ContactSupport'
 import { useQuestions } from '../hooks/questions'
 import { QuestionList } from '../components/question-list'
 import { QuestionDTO } from '../types/api'
@@ -98,7 +98,7 @@ export const Questions: React.FC = () => {
           className="fixed bottom-4 right-4"
           onClick={() => setModalOpen(true)}
         >
-          <Add />
+          <ContactSupport />
         </Fab>
       </Tooltip>
     </Container>
