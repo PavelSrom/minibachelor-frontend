@@ -1,13 +1,11 @@
-import { Programme, School } from '.'
-
 export type RegisterPayload = {
   name: string
   surname: string
   email: string
   password: string
-  role: 'student' | 'teacher'
-  school: School
-  programme: Programme
+  role: string
+  school: string
+  programme: string
 }
 
 export type LoginPayload = {

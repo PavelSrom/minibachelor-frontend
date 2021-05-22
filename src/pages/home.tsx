@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button } from '../styleguide/button'
+import { Button } from '../styleguide'
 
 export const Home: React.FC = () => {
   return (

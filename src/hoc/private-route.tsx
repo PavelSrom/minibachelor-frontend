@@ -1,5 +1,6 @@
 import { Route, Redirect } from 'react-router-dom'
 import { useAuth } from '../contexts/auth'
+import { WithLayout } from './with-layout'
 
 type Props = {
   exact?: boolean
@@ -19,7 +20,13 @@ export const PrivateRoute: React.FC<Props> = ({
       exact={exact}
       path={path}
       render={props =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+        isAuthenticated ? (
+          <WithLayout>
+            <Component {...props} />
+          </WithLayout>
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   )

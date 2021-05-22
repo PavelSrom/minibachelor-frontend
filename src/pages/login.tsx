@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { IconButton, InputAdornment, Paper } from '@material-ui/core'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
@@ -7,10 +7,8 @@ import { useSnackbar } from 'notistack'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { useAuth } from '../contexts/auth'
-import { Text } from '../styleguide/text'
-import { TextField } from '../styleguide/text-field'
+import { Text, TextField, Button } from '../styleguide'
 import { LoginPayload } from '../types/payloads'
-import { Button } from '../styleguide/button'
 
 const initialValues = {
   email: '',
@@ -40,7 +38,7 @@ export const Login: React.FC = () => {
       await login(values)
       enqueueSnackbar('Signed in', { variant: 'success' })
     } catch (err) {
-      enqueueSnackbar(err.response.data.message ?? 'Unable to sign in', {
+      enqueueSnackbar(err?.response?.data?.message || 'Unable to sign in', {
         variant: 'error',
       })
       setIsSubmitting(false)
@@ -51,11 +49,12 @@ export const Login: React.FC = () => {
 
   return (
     <section className="min-h-screen flex">
-      <div className="w-1/2 px-8 flex flex-col justify-center items-center">
-        <Paper className="p-8">
-          <Text variant="h1" className="mb-16 text-center">
+      <div className="w-1/2 p-8 flex flex-col justify-center items-center">
+        <Paper className="p-8 max-w-md">
+          <Text variant="h1" className="mb-2">
             Sign in to your account
           </Text>
+          <Text className="mb-12">Stay in touch with your colleagues</Text>
 
           <Formik
             initialValues={initialValues}
@@ -81,14 +80,23 @@ export const Login: React.FC = () => {
                   ),
                 }}
               />
-              <Button
-                fullWidth
-                type="submit"
-                color="primary"
-                loading={isSubmitting}
-              >
-                Sign in
-              </Button>
+
+              <div>
+                <Button
+                  fullWidth
+                  type="submit"
+                  color="primary"
+                  loading={isSubmitting}
+                >
+                  Sign in
+                </Button>
+                <Text variant="body2" className="mt-2">
+                  Do not have an account?{' '}
+                  <Link to="/register" className="underline">
+                    Sign up
+                  </Link>
+                </Text>
+              </div>
             </Form>
           </Formik>
         </Paper>

@@ -1,7 +1,7 @@
 import { Programme, School } from '.'
 
 export type UserDTO = {
-  id: string
+  _id: string
   name: string
   surname: string
   email: string
@@ -11,7 +11,7 @@ export type UserDTO = {
 }
 
 export type QuestionDTO = {
-  id: string
+  _id: string
   userId: string
   userName: string
   userSurname: string
@@ -24,7 +24,7 @@ export type QuestionDTO = {
 }
 
 export type ProjectDTO = {
-  id: string
+  _id: string
   userId: string
   userName: string
   userSurname: string
@@ -38,7 +38,7 @@ export type ProjectDTO = {
 }
 
 export type CommentDTO = {
-  id: string
+  _id: string
   userId: string
   entityId: string
   userName: string
