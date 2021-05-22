@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { IconButton, InputAdornment, Paper } from '@material-ui/core'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
@@ -79,14 +79,23 @@ export const Login: React.FC = () => {
                   ),
                 }}
               />
-              <Button
-                fullWidth
-                type="submit"
-                color="primary"
-                loading={isSubmitting}
-              >
-                Sign in
-              </Button>
+
+              <div>
+                <Button
+                  fullWidth
+                  type="submit"
+                  color="primary"
+                  loading={isSubmitting}
+                >
+                  Sign in
+                </Button>
+                <Text variant="body2" className="mt-2">
+                  Do not have an account?{' '}
+                  <Link to="/register" className="underline">
+                    Sign up
+                  </Link>
+                </Text>
+              </div>
             </Form>
           </Formik>
         </Paper>

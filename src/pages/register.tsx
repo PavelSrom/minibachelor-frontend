@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { IconButton, InputAdornment, MenuItem, Paper } from '@material-ui/core'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
@@ -148,6 +148,12 @@ export const Register: React.FC = () => {
                   >
                     Sign up
                   </Button>
+                  <Text variant="body2" className="mt-2">
+                    Already have an account?{' '}
+                    <Link to="/login" className="underline">
+                      Sign in
+                    </Link>
+                  </Text>
                 </div>
               </Form>
             )}
