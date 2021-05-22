@@ -47,7 +47,9 @@ export const WithLayout: React.FC = ({ children }) => {
 
   useEffect(() => {
     getProfile()
-  }, [getProfile])
+
+    // eslint-disable-next-line
+  }, [])
 
   const currentPage = navbarPages.find(page => page.url === location.pathname)
 
