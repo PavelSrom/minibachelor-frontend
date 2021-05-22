@@ -49,11 +49,12 @@ export const Login: React.FC = () => {
 
   return (
     <section className="min-h-screen flex">
-      <div className="w-1/2 px-8 flex flex-col justify-center items-center">
+      <div className="w-1/2 p-8 flex flex-col justify-center items-center">
         <Paper className="p-8">
-          <Text variant="h1" className="mb-16 text-center">
+          <Text variant="h1" className="mb-2">
             Sign in to your account
           </Text>
+          <Text className="mb-12">Stay in touch with your colleagues</Text>
 
           <Formik
             initialValues={initialValues}

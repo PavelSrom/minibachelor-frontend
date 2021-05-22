@@ -62,10 +62,14 @@ export const Register: React.FC = () => {
 
   return (
     <section className="min-h-screen flex">
-      <div className="w-1/2 px-8 flex flex-col justify-center items-center">
-        <Paper className="p-8">
-          <Text variant="h1" className="mb-16 text-center">
+      <div className="w-1/2 p-8 flex flex-col justify-center items-center">
+        <Paper className="p-8 max-w-md">
+          <Text variant="h1" className="mb-2">
             Sign up to the platform
+          </Text>
+          <Text className="mb-12">
+            Start collaborating with colleagues, discussing ideas, sharing
+            projects and much more!
           </Text>
 
           <Formik
