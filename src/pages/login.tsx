@@ -50,7 +50,7 @@ export const Login: React.FC = () => {
   return (
     <section className="min-h-screen flex">
       <div className="w-1/2 p-8 flex flex-col justify-center items-center">
-        <Paper className="p-8">
+        <Paper className="p-8 max-w-md">
           <Text variant="h1" className="mb-2">
             Sign in to your account
           </Text>
