@@ -6,10 +6,18 @@ import {
   UseQueryOptions,
 } from 'react-query'
 import { getQuestions, postQuestion } from '../api/questions'
+import { QuestionFilters } from '../types'
 import { QuestionDTO } from '../types/api'
 
-export const useQuestions = (options?: UseQueryOptions<QuestionDTO[]>) =>
-  useQuery('questions', getQuestions, options)
+export const useQuestions = (
+  filters: QuestionFilters,
+  options?: UseQueryOptions<QuestionDTO[]>
+) =>
+  useQuery(
+    ['questions', filters.school, filters.programme, filters.user],
+    () => getQuestions(filters),
+    options
+  )
 
 export const useNewQuestion = () => {
   const { enqueueSnackbar } = useSnackbar()

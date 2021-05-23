@@ -1,10 +1,22 @@
 import axios from 'axios'
+import queryString from 'query-string'
 import { API_CONFIG } from './config'
+import { QuestionFilters } from '../types'
 import { QuestionDTO } from '../types/api'
 import { NewQuestionPayload } from '../types/payloads'
 
-export const getQuestions = (): Promise<QuestionDTO[]> =>
-  axios.get(`${API_CONFIG.BASE_URL}/questions`).then(({ data }) => data)
+export const getQuestions = (
+  filters: QuestionFilters
+): Promise<QuestionDTO[]> => {
+  const query = queryString.stringify(filters, {
+    skipNull: true,
+    skipEmptyString: true,
+  })
+
+  return axios
+    .get(`${API_CONFIG.BASE_URL}/questions?${query}`)
+    .then(({ data }) => data)
+}
 
 export const postQuestion = (
   formData: NewQuestionPayload

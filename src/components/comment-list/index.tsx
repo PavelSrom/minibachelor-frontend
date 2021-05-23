@@ -68,7 +68,9 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
           </div>
         ))
       ) : (
-        <Text variant="body2">(There are no comments)</Text>
+        <Text variant="body2" className="mb-4">
+          (There are no comments)
+        </Text>
       )}
 
       <Formik

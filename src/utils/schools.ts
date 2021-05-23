@@ -2,7 +2,7 @@ import { Programme, School } from '../types'
 
 // randomly assigned
 export const schools: Record<School, Programme[]> = {
-  UCN: [
+  'University College of Northern Denmark': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',
@@ -11,7 +11,7 @@ export const schools: Record<School, Programme[]> = {
     'International Sales & Marketing',
     'Service & Hospitality',
   ],
-  BAAA: [
+  'Business Academy Aarhus': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',
@@ -20,7 +20,7 @@ export const schools: Record<School, Programme[]> = {
     'Marketing Management',
     'Sport Management',
   ],
-  VIA: [
+  'VIA University College': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',
@@ -29,7 +29,7 @@ export const schools: Record<School, Programme[]> = {
     'International Sales & Marketing',
     'Service & Hospitality',
   ],
-  BASW: [
+  'Business Academy South West': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',
@@ -38,7 +38,7 @@ export const schools: Record<School, Programme[]> = {
     'Marketing Management',
     'Sport Management',
   ],
-  KEA: [
+  'Copenhagen School of Technology': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',
@@ -47,7 +47,7 @@ export const schools: Record<School, Programme[]> = {
     'International Sales & Marketing',
     'Service & Hospitality',
   ],
-  CPHB: [
+  'Copenhagen Business Academy': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',
