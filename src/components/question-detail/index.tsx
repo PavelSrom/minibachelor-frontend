@@ -7,11 +7,14 @@ import {
   Divider,
 } from '@material-ui/core'
 import Close from '@material-ui/icons/Close'
+import { useHistory } from 'react-router-dom'
+import format from 'date-fns/format'
 import clsx from 'clsx'
 import { useComments } from '../../hooks/comments'
 import { Text } from '../../styleguide'
 import { QuestionDTO } from '../../types/api'
 import { CommentList } from '../comment-list'
+import { useAuth } from '../../contexts/auth'
 
 type Props = {
   question: QuestionDTO | undefined
@@ -19,9 +22,14 @@ type Props = {
 }
 
 export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
+  const history = useHistory()
+  const { user } = useAuth()
+
   const commentsQuery = useComments(question?._id || '', {
     enabled: !!question?._id,
   })
+
+  const notMyQuestion = user?._id !== question?.userId
 
   return (
     <Grow in={!!question}>
@@ -40,10 +48,24 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
                 <Text variant="h2">{question?.title}</Text>
                 <Text>
                   by{' '}
-                  <span className="font-semibold cursor-pointer">
+                  <span
+                    className={clsx('font-semibold', {
+                      'cursor-pointer': notMyQuestion,
+                    })}
+                    onClick={() =>
+                      notMyQuestion
+                        ? history.push(`/user/${question?.userId}`)
+                        : null
+                    }
+                  >
                     {question?.userName} {question?.userSurname}
                   </span>
                 </Text>
+                {question?.createdAt && (
+                  <Text variant="body2">
+                    {format(new Date(question!.createdAt), 'dd.MM.yyyy, hh:MM')}
+                  </Text>
+                )}
               </div>
             </div>
             <Tooltip title="Close detail">
