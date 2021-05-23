@@ -14,7 +14,7 @@ export const Dashboard: React.FC = () => {
   const [questionModalOpen, setQuestionModalOpen] = useState<boolean>(false)
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" className="py-8">
       <SpeedDial
         ariaLabel="SpeedDial"
         className="fixed bottom-4 right-4"
