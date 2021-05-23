@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import {
   Button as MuiButton,
   ButtonProps,
@@ -31,13 +32,22 @@ export const Button: React.FC<Props> = ({
   color,
   variant = 'contained',
   loading = false,
+  className,
   children,
   ...rest
 }) => {
   const classes = useStyles({ color })
 
   return (
-    <MuiButton color={color} variant={variant} disabled={loading} {...rest}>
+    <MuiButton
+      color={color}
+      variant={variant}
+      disabled={loading}
+      className={clsx('text-white', {
+        [className!]: !!className,
+      })}
+      {...rest}
+    >
       {loading && (
         <CircularProgress size={24} className={classes.buttonProgress} />
       )}

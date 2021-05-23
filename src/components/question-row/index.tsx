@@ -47,7 +47,7 @@ export const QuestionRow: React.FC<Props> = memo(
           )}
 
           <Tooltip title="View detail">
-            <IconButton size="small" onClick={onDetailClick}>
+            <IconButton size="small" color="secondary" onClick={onDetailClick}>
               <AddCircleOutline />
             </IconButton>
           </Tooltip>
