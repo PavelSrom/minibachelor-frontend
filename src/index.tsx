@@ -2,29 +2,32 @@ import { render } from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 import { QueryClientProvider } from 'react-query'
-import { StylesProvider } from '@material-ui/core'
+import { ThemeProvider, StylesProvider } from '@material-ui/core'
 import './index.css'
 import { App } from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { AuthProvider } from './contexts/auth'
 import { queryClient } from './utils/query-client'
+import { muiTheme } from './utils/theme'
 
 require('./utils/axios-interceptor')
 
 const app = (
   <QueryClientProvider client={queryClient}>
-    <StylesProvider injectFirst>
-      <SnackbarProvider
-        dense
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Router>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </Router>
-      </SnackbarProvider>
-    </StylesProvider>
+    <ThemeProvider theme={muiTheme}>
+      <StylesProvider injectFirst>
+        <SnackbarProvider
+          dense
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Router>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </Router>
+        </SnackbarProvider>
+      </StylesProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 )
 

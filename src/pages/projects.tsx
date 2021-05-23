@@ -10,7 +10,7 @@ export const Projects: React.FC = () => {
       <Tooltip title="Upload project" placement="left">
         <Fab
           color="secondary"
-          className="fixed bottom-4 right-4"
+          className="fixed bottom-4 right-4 text-white"
           onClick={() => setModalOpen(true)}
         >
           <PostAdd />

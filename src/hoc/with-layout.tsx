@@ -62,14 +62,14 @@ export const WithLayout: React.FC = ({ children }) => {
           <ListItem key={url} button component={Link} to={url} className="py-4">
             <ListItemIcon
               className={clsx({
-                'text-red-500': location.pathname === url,
+                'text-theme-secondary': location.pathname === url,
               })}
             >
               <Icon />
             </ListItemIcon>
             <Text
               className={clsx('font-normal', {
-                'text-red-500': location.pathname === url,
+                'text-theme-secondary': location.pathname === url,
               })}
             >
               {label}

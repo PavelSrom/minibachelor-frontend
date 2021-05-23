@@ -16,9 +16,9 @@ export const Dashboard: React.FC = () => {
   return (
     <Container maxWidth="lg">
       <SpeedDial
-        ariaLabel="SpeedDial example"
+        ariaLabel="SpeedDial"
         className="fixed bottom-4 right-4"
-        icon={<SpeedDialIcon />}
+        icon={<SpeedDialIcon className="text-white" />}
         onClose={() => setSpeedDialOpen(false)}
         onOpen={() => setSpeedDialOpen(true)}
         open={speedDialOpen}

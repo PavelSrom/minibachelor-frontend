@@ -109,7 +109,7 @@ export const Questions: React.FC = () => {
       <Tooltip title="Ask question" placement="left">
         <Fab
           color="secondary"
-          className="fixed bottom-4 right-4"
+          className="fixed bottom-4 right-4 text-white"
           onClick={() => setModalOpen(true)}
         >
           <ContactSupport />

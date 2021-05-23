@@ -144,7 +144,6 @@ export const Register: React.FC = () => {
 
                 <div className="col-span-12">
                   <Button
-                    disabled // TODO: remove later
                     fullWidth
                     type="submit"
                     color="primary"
