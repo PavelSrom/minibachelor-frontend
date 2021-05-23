@@ -1,5 +1,7 @@
 import { Switch, Route } from 'react-router-dom'
 import { PrivateRoute } from './hoc/private-route'
+import { useDevice } from './hooks/use-device'
+import { OnlyDesktop } from './components/only-desktop'
 // pages
 import { UserDetail } from './pages/user-detail'
 import { Dashboard } from './pages/dashboard'
@@ -10,6 +12,10 @@ import { Questions } from './pages/questions'
 import { Register } from './pages/register'
 
 export const App: React.FC = () => {
+  const { width } = useDevice()
+
+  if (width < 1024) return <OnlyDesktop />
+
   return (
     <Switch>
       <Route exact path="/" component={Home} />
