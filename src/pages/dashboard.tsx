@@ -1,16 +1,17 @@
 import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Container } from '@material-ui/core'
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab'
 import ContactSupport from '@material-ui/icons/ContactSupport'
 import PostAdd from '@material-ui/icons/PostAdd'
-
-const actions: { icon: JSX.Element; tooltip: string }[] = [
-  { icon: <ContactSupport />, tooltip: 'Ask question' },
-  { icon: <PostAdd />, tooltip: 'Upload project' },
-]
+import { NewQuestionModal } from '../components/new-question-modal'
+import { NewProjectModal } from '../components/new-project-modal'
 
 export const Dashboard: React.FC = () => {
+  const history = useHistory()
   const [speedDialOpen, setSpeedDialOpen] = useState<boolean>(false)
+  const [projectModalOpen, setProjectModalOpen] = useState<boolean>(false)
+  const [questionModalOpen, setQuestionModalOpen] = useState<boolean>(false)
 
   return (
     <Container maxWidth="lg">
@@ -23,15 +24,34 @@ export const Dashboard: React.FC = () => {
         open={speedDialOpen}
         direction="up"
       >
-        {actions.map(({ icon, tooltip }) => (
-          <SpeedDialAction
-            key={tooltip}
-            icon={icon}
-            tooltipTitle={tooltip}
-            onClick={() => setSpeedDialOpen(false)}
-          />
-        ))}
+        <SpeedDialAction
+          icon={<ContactSupport />}
+          tooltipTitle="Ask question"
+          onClick={() => {
+            setSpeedDialOpen(false)
+            setQuestionModalOpen(true)
+          }}
+        />
+        <SpeedDialAction
+          icon={<PostAdd />}
+          tooltipTitle="Upload project"
+          onClick={() => {
+            setSpeedDialOpen(false)
+            setProjectModalOpen(true)
+          }}
+        />
       </SpeedDial>
+
+      <NewQuestionModal
+        open={questionModalOpen}
+        onClose={() => setQuestionModalOpen(false)}
+        onCreated={() => history.push('/questions')}
+      />
+      <NewProjectModal
+        open={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+        onCreated={() => history.push('/projects')}
+      />
     </Container>
   )
 }

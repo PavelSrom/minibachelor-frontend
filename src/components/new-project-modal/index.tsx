@@ -2,20 +2,23 @@ import { Dialog, IconButton } from '@material-ui/core'
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { useNewQuestion } from '../../hooks/questions'
 import { Text, TextField, Button } from '../../styleguide'
-import { NewQuestionPayload } from '../../types/payloads'
+import { NewProjectPayload } from '../../types/payloads'
 
 const initialValues = {
   title: '',
   description: '',
-  isPublic: false,
+  demoUrl: '',
+  otherUrl: '',
 }
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required('This field is required'),
-  description: Yup.string().required('This field is required'),
-  isPublic: Yup.boolean().required('This field is required'),
+  description: Yup.string(),
+  demoUrl: Yup.string()
+    .url('Must be a valid URL')
+    .required('This field is required'),
+  otherUrl: Yup.string().url('Must be a valid URL'),
 })
 
 type Props = {
@@ -24,19 +27,9 @@ type Props = {
   onCreated?: () => void
 }
 
-export const NewQuestionModal: React.FC<Props> = ({
-  open,
-  onClose,
-  onCreated,
-}) => {
-  const { mutateAsync: postQuestion, isLoading: isPostingQuestion } =
-    useNewQuestion()
-
-  const handleSubmit = (values: NewQuestionPayload): void => {
-    postQuestion(values).then(() => {
-      onCreated?.()
-      onClose()
-    })
+export const NewProjectModal: React.FC<Props> = ({ open, onClose }) => {
+  const handleSubmit = (values: NewProjectPayload): void => {
+    console.log(values)
   }
 
   return (
@@ -48,7 +41,7 @@ export const NewQuestionModal: React.FC<Props> = ({
       PaperProps={{ className: 'p-8' }}
     >
       <div className="flex justify-between items-center mb-16">
-        <Text variant="h1">Ask question</Text>
+        <Text variant="h1">Upload project</Text>
         <IconButton size="small" onClick={onClose}>
           <Close />
         </IconButton>
@@ -60,19 +53,16 @@ export const NewQuestionModal: React.FC<Props> = ({
         onSubmit={handleSubmit}
       >
         <Form className="space-y-8">
-          <TextField name="title" label="Question title" />
+          <TextField name="title" label="Project title" />
           <TextField
             name="description"
-            label="Question description"
+            label="Project description (optional)"
             multiline
           />
-          <Button
-            fullWidth
-            type="submit"
-            color="secondary"
-            loading={isPostingQuestion}
-          >
-            Ask
+          <TextField name="demoUrl" label="Demo URL" />
+          <TextField name="otherUrl" label="Other URL (optional)" />
+          <Button fullWidth type="submit" color="secondary">
+            Upload
           </Button>
         </Form>
       </Formik>

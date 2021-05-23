@@ -1,4 +1,10 @@
-export type School = 'UCN' | 'BAAA' | 'VIA' | 'BASW' | 'KEA' | 'CPHB'
+export type School =
+  | 'University College of Northern Denmark'
+  | 'Business Academy Aarhus'
+  | 'VIA University College'
+  | 'Business Academy South West'
+  | 'Copenhagen School of Technology'
+  | 'Copenhagen Business Academy'
 
 export type Programme =
   // IT + design
@@ -15,3 +21,9 @@ export type Programme =
   // Sport & hospitality
   | 'Service & Hospitality'
   | 'Sport Management'
+
+export type QuestionFilters = {
+  school?: string
+  programme?: string
+  user?: string
+}

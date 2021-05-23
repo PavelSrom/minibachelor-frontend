@@ -20,13 +20,17 @@ import { QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { Text } from '../styleguide'
 import { NewQuestionModal } from '../components/new-question-modal'
+import { useAuth } from '../contexts/auth'
+import { schools } from '../utils/schools'
 
 export const Questions: React.FC = () => {
+  const { user } = useAuth()
+
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
   const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [sortBy, setSortBy] = useState<string>('newest')
+  const [school, setSchool] = useState<string>(user?.school ?? '')
 
-  const questionsQuery = useQuestions()
+  const questionsQuery = useQuestions({ school, programme: user?.programme })
 
   return (
     <Container maxWidth="lg" className="py-8">
@@ -49,18 +53,28 @@ export const Questions: React.FC = () => {
           </IconButton>
         </Paper>
 
-        <div>
+        <div className="flex items-end space-x-4">
           <TextField
             size="small"
             variant="outlined"
-            label="Sort by"
-            select
-            value={sortBy}
-            onChange={e => setSortBy(e.target.value)}
+            label="School"
+            value={school}
+            onChange={e => setSchool(e.target.value)}
+            select={!!schools[school]}
           >
-            <MenuItem value="newest">Newest</MenuItem>
-            <MenuItem value="oldest">Oldest</MenuItem>
+            {Object.keys(schools).map(school => (
+              <MenuItem key={school} value={school}>
+                {school}
+              </MenuItem>
+            ))}
           </TextField>
+          <TextField
+            size="small"
+            variant="outlined"
+            label="Programme"
+            disabled
+            value={user?.programme}
+          />
         </div>
       </div>
       <Divider className="mt-2 mb-8" />
