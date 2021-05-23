@@ -3,7 +3,7 @@ import { Fab, Tooltip } from '@material-ui/core'
 import PostAdd from '@material-ui/icons/PostAdd'
 
 export const Projects: React.FC = () => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [, setModalOpen] = useState<boolean>(false)
 
   return (
     <div>
