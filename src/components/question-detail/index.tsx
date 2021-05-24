@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import format from 'date-fns/format'
+import clsx from 'clsx'
 import {
   Grow,
   Paper,
@@ -6,15 +10,14 @@ import {
   Tooltip,
   Divider,
 } from '@material-ui/core'
+import Delete from '@material-ui/icons/Delete'
 import Close from '@material-ui/icons/Close'
-import { useHistory } from 'react-router-dom'
-import format from 'date-fns/format'
-import clsx from 'clsx'
 import { useComments } from '../../hooks/comments'
-import { Text } from '../../styleguide'
+import { ConfirmationDialog, Text } from '../../styleguide'
 import { QuestionDTO } from '../../types/api'
 import { CommentList } from '../comment-list'
 import { useAuth } from '../../contexts/auth'
+import { useDeleteQuestion } from '../../hooks/questions'
 
 type Props = {
   question: QuestionDTO | undefined
@@ -22,9 +25,12 @@ type Props = {
 }
 
 export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const history = useHistory()
   const { user } = useAuth()
 
+  const { mutateAsync: deleteQuestion, isLoading: isDeletingQuestion } =
+    useDeleteQuestion()
   const commentsQuery = useComments(question?._id || '', {
     enabled: !!question?._id,
   })
@@ -68,11 +74,23 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
                 )}
               </div>
             </div>
-            <Tooltip title="Close detail">
-              <IconButton size="small" edge="end" onClick={onClose}>
-                <Close />
-              </IconButton>
-            </Tooltip>
+            <div className="space-x-2">
+              {question?.userId === user?._id && (
+                <Tooltip title="Delete question">
+                  <IconButton
+                    size="small"
+                    onClick={() => setDeleteDialogOpen(true)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Tooltip title="Close detail">
+                <IconButton size="small" edge="end" onClick={onClose}>
+                  <Close />
+                </IconButton>
+              </Tooltip>
+            </div>
           </div>
 
           <Text>{question?.description ?? '(No description)'}</Text>
@@ -91,6 +109,19 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
             />
           )}
         </Paper>
+
+        <ConfirmationDialog
+          open={deleteDialogOpen}
+          onClose={() => setDeleteDialogOpen(false)}
+          onConfirm={() =>
+            deleteQuestion(question!._id).finally(() => {
+              setDeleteDialogOpen(false)
+              onClose()
+            })
+          }
+          loading={isDeletingQuestion}
+          confirmText="Delete"
+        />
       </div>
     </Grow>
   )

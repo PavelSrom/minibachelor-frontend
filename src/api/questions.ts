@@ -24,3 +24,8 @@ export const postQuestion = (
   axios
     .post(`${API_CONFIG.BASE_URL}/questions`, formData)
     .then(({ data }) => data)
+
+export const deleteQuestion = (id: string): Promise<unknown> =>
+  axios
+    .delete(`${API_CONFIG.BASE_URL}/questions/${id}`)
+    .then(({ data }) => data)

@@ -43,7 +43,8 @@ export const Button: React.FC<Props> = ({
       color={color}
       variant={variant}
       disabled={loading}
-      className={clsx('text-white', {
+      className={clsx({
+        'text-white': variant === 'contained',
         [className!]: !!className,
       })}
       {...rest}

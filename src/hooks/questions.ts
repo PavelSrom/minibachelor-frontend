@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryOptions,
 } from 'react-query'
-import { getQuestions, postQuestion } from '../api/questions'
+import { deleteQuestion, getQuestions, postQuestion } from '../api/questions'
 import { QuestionFilters } from '../types'
 import { QuestionDTO } from '../types/api'
 
@@ -29,6 +29,23 @@ export const useNewQuestion = () => {
     },
     onError: () => {
       enqueueSnackbar('Cannot post question', { variant: 'error' })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries('questions')
+    },
+  })
+}
+
+export const useDeleteQuestion = () => {
+  const { enqueueSnackbar } = useSnackbar()
+  const queryClient = useQueryClient()
+
+  return useMutation(deleteQuestion, {
+    onSuccess: () => {
+      enqueueSnackbar('Question deleted', { variant: 'success' })
+    },
+    onError: () => {
+      enqueueSnackbar('Cannot delete question', { variant: 'error' })
     },
     onSettled: () => {
       queryClient.invalidateQueries('questions')

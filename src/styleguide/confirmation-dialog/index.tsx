@@ -14,6 +14,7 @@ type Props = Omit<DialogProps, 'open' | 'onClose'> & {
   loading?: boolean
   title?: string
   description?: string
+  confirmText?: string
 }
 
 export const ConfirmationDialog: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const ConfirmationDialog: React.FC<Props> = ({
   title = 'Are you sure?',
   description = 'This action is irreversible!',
   loading = false,
+  confirmText = 'Confirm',
   ...rest
 }) => {
   return (
@@ -32,14 +34,16 @@ export const ConfirmationDialog: React.FC<Props> = ({
         <p>{description}</p>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button variant="outlined" onClick={onClose}>
+          Cancel
+        </Button>
         <Button
           loading={loading}
           variant="contained"
           color="secondary"
           onClick={onConfirm}
         >
-          Confirm
+          {confirmText}
         </Button>
       </DialogActions>
     </Dialog>
