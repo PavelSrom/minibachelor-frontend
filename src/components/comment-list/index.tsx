@@ -96,6 +96,7 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
             setComIdToDelete(undefined)
           )
         }
+        description="Are you sure you want to delete this comment?"
         confirmText="Delete"
       />
     </>

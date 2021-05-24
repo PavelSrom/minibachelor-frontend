@@ -120,6 +120,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
             })
           }
           loading={isDeletingQuestion}
+          description="Are you sure you want to delete this question? All its comments will also be deleted."
           confirmText="Delete"
         />
       </div>

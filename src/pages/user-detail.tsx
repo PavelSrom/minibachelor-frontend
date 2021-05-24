@@ -9,9 +9,18 @@ import { QuestionRow } from '../components/question-row'
 import { QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { useColleagueDetail } from '../hooks/colleagues'
+import { QuestionRowSkeleton } from '../components/skeletons/question-row'
 
 const QUESTIONS = 0
 const PROJECTS = 1
+
+const questionSkeleton = (
+  <div className="space-y-6">
+    {[...new Array(4).keys()].map(key => (
+      <QuestionRowSkeleton key={key} />
+    ))}
+  </div>
+)
 
 export const UserDetail: React.FC = () => {
   const { user } = useAuth()
@@ -84,7 +93,7 @@ export const UserDetail: React.FC = () => {
 
               {tabValue === QUESTIONS && (
                 <>
-                  {questionsQuery.isLoading && <p>Loading...</p>}
+                  {questionsQuery.isLoading && questionSkeleton}
                   {questionsQuery.error && <p>Error :(</p>}
 
                   {questionsQuery.isSuccess && questionsQuery.data && (

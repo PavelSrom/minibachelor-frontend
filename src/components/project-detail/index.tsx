@@ -149,6 +149,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
             })
           }
           loading={isDeletingProject}
+          description="Are you sure you want to delete this project? All its comments will also be deleted."
           confirmText="Delete"
         />
       </div>
