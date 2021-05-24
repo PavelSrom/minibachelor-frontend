@@ -59,7 +59,10 @@ export const Questions: React.FC = () => {
             variant="outlined"
             label="School"
             value={school}
-            onChange={e => setSchool(e.target.value)}
+            onChange={e => {
+              setSchool(e.target.value)
+              setDetailOpen(undefined) // close quickview on school change
+            }}
             select={!!schools[school]}
           >
             {Object.keys(schools).map(school => (
@@ -77,7 +80,7 @@ export const Questions: React.FC = () => {
           />
         </div>
       </div>
-      <Divider className="mt-2 mb-8" />
+      <Divider className="mt-2 mb-6" />
 
       {questionsQuery.isLoading && <p>Loading...</p>}
       {questionsQuery.isError && <p>Error :(</p>}

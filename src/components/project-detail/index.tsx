@@ -43,7 +43,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
       <div
         className={clsx({
           // change classes here to fix quickview tooltip behavior
-          'w-1/2 visible ml-8': !!project,
+          'w-1/2 visible ml-6': !!project,
           'w-0 invisible': !project,
         })}
       >

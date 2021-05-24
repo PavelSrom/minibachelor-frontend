@@ -42,7 +42,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
       <div
         className={clsx({
           // change classes here to fix quickview tooltip behavior
-          'w-1/2 visible ml-8': !!question,
+          'w-1/2 visible ml-6': !!question,
           'w-0 invisible': !question,
         })}
       >

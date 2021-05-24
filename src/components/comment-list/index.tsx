@@ -79,7 +79,7 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <TextField name="text" label="Text" multiline />
+          <TextField name="text" label="Text" multiline rowsMax={4} />
           <div className="mt-2 flex justify-end">
             <Button type="submit" loading={isLoading} color="secondary">
               Add comment

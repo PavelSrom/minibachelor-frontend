@@ -60,7 +60,7 @@ export const Projects: React.FC = () => {
           </TextField>
         </div>
       </div>
-      <Divider className="mt-2 mb-8" />
+      <Divider className="mt-2 mb-6" />
 
       {projectsQuery.isLoading && <p>Loading...</p>}
       {projectsQuery.isError && <p>Error :(</p>}
@@ -79,8 +79,10 @@ export const Projects: React.FC = () => {
                   <div
                     key={project._id}
                     className={clsx({
-                      'col-span-3': !detailOpen,
-                      'col-span-6': detailOpen,
+                      'lg:col-span-6': !detailOpen,
+                      'xl:col-span-3': !detailOpen,
+                      'lg:col-span-12': detailOpen,
+                      'xl:col-span-6': detailOpen,
                     })}
                   >
                     <ProjectCard
