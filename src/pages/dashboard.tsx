@@ -18,6 +18,7 @@ export const Dashboard: React.FC = () => {
       <SpeedDial
         ariaLabel="SpeedDial"
         className="fixed bottom-4 right-4"
+        FabProps={{ color: 'secondary' }}
         icon={<SpeedDialIcon className="text-white" />}
         onClose={() => setSpeedDialOpen(false)}
         onOpen={() => setSpeedDialOpen(true)}
