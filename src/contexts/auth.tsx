@@ -87,7 +87,6 @@ export const AuthProvider: React.FC = ({ children }) => {
       localStorage.setItem('x-auth-token', token)
       setIsAuthenticated(true)
       setStatus('settled')
-      history.push('/dashboard')
       enqueueSnackbar('Signed in', { variant: 'success' })
     } catch (err) {
       enqueueSnackbar('Session expired', { variant: 'warning' })
