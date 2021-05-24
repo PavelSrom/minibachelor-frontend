@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import {
   Container,
@@ -29,6 +29,11 @@ export const Questions: React.FC = () => {
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [school, setSchool] = useState<string>(user?.school ?? '')
+
+  // correctly set 'school' text field value on first load
+  useEffect(() => {
+    if (user) setSchool(user?.school)
+  }, [user])
 
   const questionsQuery = useQuestions({ school, programme: user?.programme })
 
@@ -64,6 +69,7 @@ export const Questions: React.FC = () => {
               setDetailOpen(undefined) // close quickview on school change
             }}
             select={!!schools[school]}
+            InputLabelProps={{ shrink: true }}
           >
             {Object.keys(schools).map(school => (
               <MenuItem key={school} value={school}>
@@ -77,6 +83,7 @@ export const Questions: React.FC = () => {
             label="Programme"
             disabled
             value={user?.programme}
+            InputLabelProps={{ shrink: true }}
           />
         </div>
       </div>
