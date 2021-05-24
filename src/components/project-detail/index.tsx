@@ -10,40 +10,41 @@ import {
   Tooltip,
   Divider,
 } from '@material-ui/core'
+import Link from '@material-ui/icons/Link'
 import Delete from '@material-ui/icons/Delete'
 import Close from '@material-ui/icons/Close'
 import { useComments } from '../../hooks/comments'
 import { ConfirmationDialog, Text } from '../../styleguide'
-import { QuestionDTO } from '../../types/api'
+import { ProjectDTO } from '../../types/api'
 import { CommentList } from '../comment-list'
 import { useAuth } from '../../contexts/auth'
-import { useDeleteQuestion } from '../../hooks/questions'
+import { useDeleteProject } from '../../hooks/projects'
 
 type Props = {
-  question: QuestionDTO | undefined
+  project: ProjectDTO | undefined
   onClose: () => void
 }
 
-export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
+export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const history = useHistory()
   const { user } = useAuth()
 
-  const { mutateAsync: deleteQuestion, isLoading: isDeletingQuestion } =
-    useDeleteQuestion()
-  const commentsQuery = useComments(question?._id || '', {
-    enabled: !!question?._id,
+  const { mutateAsync: deleteProject, isLoading: isDeletingProject } =
+    useDeleteProject()
+  const commentsQuery = useComments(project?._id || '', {
+    enabled: !!project?._id,
   })
 
-  const notMyQuestion = user?._id !== question?.userId
+  const notMyProject = user?._id !== project?.userId
 
   return (
-    <Grow in={!!question}>
+    <Grow in={!!project}>
       <div
         className={clsx({
           // change classes here to fix quickview tooltip behavior
-          'w-1/2 visible ml-6': !!question,
-          'w-0 invisible': !question,
+          'w-1/2 visible ml-6': !!project,
+          'w-0 invisible': !project,
         })}
       >
         <Paper className="p-6 sticky top-20">
@@ -51,32 +52,60 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
             <div className="flex">
               <Avatar className="w-16 h-16" />
               <div className="ml-4">
-                <Text variant="h2">{question?.title}</Text>
+                <Text variant="h2">{project?.title}</Text>
                 <Text>
                   by{' '}
                   <span
                     className={clsx('font-semibold', {
-                      'cursor-pointer': notMyQuestion,
+                      'cursor-pointer': notMyProject,
                     })}
                     onClick={() =>
-                      notMyQuestion
-                        ? history.push(`/user/${question?.userId}`)
+                      notMyProject
+                        ? history.push(`/user/${project?.userId}`)
                         : null
                     }
                   >
-                    {question?.userName} {question?.userSurname}
+                    {project?.userName} {project?.userSurname}
                   </span>
                 </Text>
-                {question?.createdAt && (
+                {project?.createdAt && (
                   <Text variant="body2">
-                    {format(new Date(question!.createdAt), 'dd.MM.yyyy, hh:MM')}
+                    {format(new Date(project!.createdAt), 'dd.MM.yyyy, hh:MM')}
                   </Text>
                 )}
+                <div>
+                  {project?.otherUrl && (
+                    <Tooltip title="View details in a new tab">
+                      <IconButton size="small" color="primary">
+                        <a
+                          href={project?.otherUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-6 h-6 flex items-center"
+                        >
+                          <Link />
+                        </a>
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  <Tooltip title="View demo in a new tab">
+                    <IconButton size="small" color="secondary">
+                      <a
+                        href={project?.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-6 h-6 flex items-center"
+                      >
+                        <Link />
+                      </a>
+                    </IconButton>
+                  </Tooltip>
+                </div>
               </div>
             </div>
             <div className="space-x-2">
-              {question?.userId === user?._id && (
-                <Tooltip title="Delete question">
+              {project?.userId === user?._id && (
+                <Tooltip title="Delete project">
                   <IconButton
                     size="small"
                     onClick={() => setDeleteDialogOpen(true)}
@@ -93,7 +122,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
             </div>
           </div>
 
-          <Text>{question?.description ?? '(No description)'}</Text>
+          <Text>{project?.description ?? '(No description)'}</Text>
 
           <Text variant="h2" className="mt-8">
             Comments {commentsQuery.data && `(${commentsQuery.data.length})`}
@@ -104,7 +133,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
 
           {commentsQuery.isSuccess && commentsQuery.data && (
             <CommentList
-              entityId={question!._id}
+              entityId={project!._id}
               comments={commentsQuery.data}
             />
           )}
@@ -114,13 +143,13 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
           open={deleteDialogOpen}
           onClose={() => setDeleteDialogOpen(false)}
           onConfirm={() =>
-            deleteQuestion(question!._id).finally(() => {
+            deleteProject(project!._id).then(() => {
               setDeleteDialogOpen(false)
               onClose()
             })
           }
-          loading={isDeletingQuestion}
-          description="Are you sure you want to delete this question? All its comments will also be deleted."
+          loading={isDeletingProject}
+          description="Are you sure you want to delete this project? All its comments will also be deleted."
           confirmText="Delete"
         />
       </div>

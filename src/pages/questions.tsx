@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import {
   Container,
@@ -22,6 +22,15 @@ import { Text } from '../styleguide'
 import { NewQuestionModal } from '../components/new-question-modal'
 import { useAuth } from '../contexts/auth'
 import { schools } from '../utils/schools'
+import { QuestionRowSkeleton } from '../components/skeletons/question-row'
+
+const questionSkeleton = (
+  <div className="space-y-2">
+    {[...new Array(8).keys()].map(key => (
+      <QuestionRowSkeleton key={key} />
+    ))}
+  </div>
+)
 
 export const Questions: React.FC = () => {
   const { user } = useAuth()
@@ -29,6 +38,11 @@ export const Questions: React.FC = () => {
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [school, setSchool] = useState<string>(user?.school ?? '')
+
+  // correctly set 'school' text field value on first load
+  useEffect(() => {
+    if (user) setSchool(user?.school)
+  }, [user])
 
   const questionsQuery = useQuestions({ school, programme: user?.programme })
 
@@ -59,8 +73,12 @@ export const Questions: React.FC = () => {
             variant="outlined"
             label="School"
             value={school}
-            onChange={e => setSchool(e.target.value)}
+            onChange={e => {
+              setSchool(e.target.value)
+              setDetailOpen(undefined) // close quickview on school change
+            }}
             select={!!schools[school]}
+            InputLabelProps={{ shrink: true }}
           >
             {Object.keys(schools).map(school => (
               <MenuItem key={school} value={school}>
@@ -74,12 +92,13 @@ export const Questions: React.FC = () => {
             label="Programme"
             disabled
             value={user?.programme}
+            InputLabelProps={{ shrink: true }}
           />
         </div>
       </div>
-      <Divider className="mt-2 mb-8" />
+      <Divider className="mt-2 mb-6" />
 
-      {questionsQuery.isLoading && <p>Loading...</p>}
+      {questionsQuery.isLoading && questionSkeleton}
       {questionsQuery.isError && <p>Error :(</p>}
 
       {questionsQuery.isSuccess && questionsQuery.data && (

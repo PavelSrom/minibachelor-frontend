@@ -1,9 +1,10 @@
+import { useState } from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Formik, Form, FormikHelpers } from 'formik'
 import * as Yup from 'yup'
 import Delete from '@material-ui/icons/Delete'
 import { Avatar, IconButton, Tooltip } from '@material-ui/core'
-import { Text, TextField, Button } from '../../styleguide'
+import { Text, TextField, Button, ConfirmationDialog } from '../../styleguide'
 import { CommentDTO } from '../../types/api'
 import { useDeleteComment, useNewComment } from '../../hooks/comments'
 import { NewCommentPayload } from '../../types/payloads'
@@ -19,10 +20,11 @@ type Props = {
 }
 
 export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
+  const [comIdToDelete, setComIdToDelete] = useState<string | undefined>()
   const { user } = useAuth()
 
   const { mutateAsync: addComment, isLoading } = useNewComment()
-  const { mutate: deleteComment } = useDeleteComment()
+  const { mutateAsync: deleteComment } = useDeleteComment()
 
   const handleSubmit = (
     values: NewCommentPayload,
@@ -50,9 +52,7 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
                     <Tooltip title="Delete this comment">
                       <IconButton
                         className="p-0"
-                        onClick={() =>
-                          deleteComment({ entityId, commentId: comment._id })
-                        }
+                        onClick={() => setComIdToDelete(comment._id)}
                       >
                         <Delete />
                       </IconButton>
@@ -79,7 +79,7 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <TextField name="text" label="Text" multiline />
+          <TextField name="text" label="Text" multiline rowsMax={4} />
           <div className="mt-2 flex justify-end">
             <Button type="submit" loading={isLoading} color="secondary">
               Add comment
@@ -87,6 +87,18 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
           </div>
         </Form>
       </Formik>
+
+      <ConfirmationDialog
+        open={!!comIdToDelete}
+        onClose={() => setComIdToDelete(undefined)}
+        onConfirm={() =>
+          deleteComment({ entityId, commentId: comIdToDelete! }).finally(() =>
+            setComIdToDelete(undefined)
+          )
+        }
+        description="Are you sure you want to delete this comment?"
+        confirmText="Delete"
+      />
     </>
   )
 }

@@ -14,10 +14,11 @@ export const Dashboard: React.FC = () => {
   const [questionModalOpen, setQuestionModalOpen] = useState<boolean>(false)
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" className="py-8">
       <SpeedDial
         ariaLabel="SpeedDial"
         className="fixed bottom-4 right-4"
+        FabProps={{ color: 'secondary' }}
         icon={<SpeedDialIcon className="text-white" />}
         onClose={() => setSpeedDialOpen(false)}
         onOpen={() => setSpeedDialOpen(true)}

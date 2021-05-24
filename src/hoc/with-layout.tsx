@@ -58,24 +58,41 @@ export const WithLayout: React.FC = ({ children }) => {
       <div className={classes.toolbar} />
       <Divider />
       <List className="pt-0">
-        {navbarPages.map(({ url, label, icon: Icon }) => (
-          <ListItem key={url} button component={Link} to={url} className="py-4">
-            <ListItemIcon
-              className={clsx({
-                'text-theme-secondary': location.pathname === url,
+        {navbarPages.map(({ url, label, icon: Icon }) => {
+          const isCurrentPage = location.pathname === url
+
+          return (
+            <ListItem
+              key={url}
+              button
+              component={Link}
+              to={url}
+              className={clsx('py-5', {
+                'bg-theme-lightgray': isCurrentPage,
               })}
+              TouchRippleProps={{
+                className: clsx('', {
+                  'border-l-4 border-theme-secondary': isCurrentPage,
+                }),
+              }}
             >
-              <Icon />
-            </ListItemIcon>
-            <Text
-              className={clsx('font-normal', {
-                'text-theme-secondary': location.pathname === url,
-              })}
-            >
-              {label}
-            </Text>
-          </ListItem>
-        ))}
+              <ListItemIcon
+                className={clsx({
+                  'text-theme-secondary': isCurrentPage,
+                })}
+              >
+                <Icon />
+              </ListItemIcon>
+              <Text
+                className={clsx('font-semibold', {
+                  'text-theme-secondary': isCurrentPage,
+                })}
+              >
+                {label}
+              </Text>
+            </ListItem>
+          )
+        })}
       </List>
     </div>
   )

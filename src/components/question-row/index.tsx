@@ -36,7 +36,7 @@ export const QuestionRow: React.FC<Props> = memo(
                 <Avatar className="w-8 h-8 mr-2">{userInitials}</Avatar>
                 <Text variant="body2">
                   by{' '}
-                  <span className="font-semibold cursor-pointer">{`${question.userName} ${question.userSurname}`}</span>
+                  <span className="font-semibold">{`${question.userName} ${question.userSurname}`}</span>
                 </Text>
               </div>
 
