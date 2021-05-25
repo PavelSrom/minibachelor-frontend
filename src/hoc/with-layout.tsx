@@ -127,11 +127,17 @@ export const WithLayout: React.FC = ({ children }) => {
           <Drawer
             classes={{
               paper: classes.drawerPaper,
+              root: 'relative',
             }}
             variant="permanent"
             open
           >
             {drawer}
+            <img
+              src="/images/sidebar.svg"
+              alt="sidebar.svg"
+              className="absolute bottom-0 left-0"
+            />
           </Drawer>
         </Hidden>
       </nav>

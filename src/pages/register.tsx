@@ -61,9 +61,9 @@ export const Register: React.FC = () => {
   if (isAuthenticated) return <Redirect to="/dashboard" />
 
   return (
-    <section className="min-h-screen flex">
-      <div className="w-1/2 p-8 flex flex-col justify-center items-center">
-        <Paper className="p-8 max-w-md">
+    <section className="min-h-screen flex overflow-hidden">
+      <div className="relative w-1/2 p-8 flex flex-col justify-center items-center">
+        <Paper className="p-8 max-w-md z-10">
           <Text variant="h1" className="mb-2">
             Sign up to the platform
           </Text>
@@ -162,11 +162,27 @@ export const Register: React.FC = () => {
             )}
           </Formik>
         </Paper>
+
+        <img
+          src="/images/login-decor.svg"
+          alt="login-decor.svg"
+          className="absolute -bottom-0.5 left-4"
+        />
       </div>
-      <div
-        className="w-1/2 bg-cover bg-left"
-        style={{ backgroundImage: 'url(/images/banner.jpg)' }}
-      />
+
+      <div className="w-1/2 bg-white p-8 flex flex-col justify-center items-center">
+        <div className="max-w-xl">
+          <img
+            src="/images/register.svg"
+            alt="login.svg"
+            className="max-w-full h-auto"
+          />
+          <Text className="text-2xl mt-6">
+            Our app helps you connect and share
+            <br /> ideas and projects with your colleagues
+          </Text>
+        </div>
+      </div>
     </section>
   )
 }

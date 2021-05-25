@@ -24,7 +24,7 @@ export const Home: React.FC = () => {
           <Button variant="text" component={Link} to="/">
             Home
           </Button>
-          <Button variant="text" component="a" to="#features">
+          <Button variant="text" component="a" href="#features">
             Features
           </Button>
           <Button variant="text" component={Link} to="/register">
@@ -91,8 +91,10 @@ export const Home: React.FC = () => {
         className="max-w-full h-auto mx-auto mt-16"
       />
 
-      <footer className="h-8 flex justify-center items-center bg-gray-700">
-        <Text className="text-white">Copyright</Text>
+      <footer className="h-12 flex justify-center items-center bg-gray-700">
+        <Text className="text-white">
+          Copyright &copy;2021 Pavel Srom, Nicoleta Olaru, Jonas Sørensen
+        </Text>
       </footer>
     </>
   )

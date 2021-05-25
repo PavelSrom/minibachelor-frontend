@@ -48,9 +48,9 @@ export const Login: React.FC = () => {
   if (isAuthenticated) return <Redirect to="/dashboard" />
 
   return (
-    <section className="min-h-screen flex">
-      <div className="w-1/2 p-8 flex flex-col justify-center items-center">
-        <Paper className="p-8 max-w-md">
+    <section className="min-h-screen flex overflow-hidden">
+      <div className="relative w-1/2 p-8 flex flex-col justify-center items-center">
+        <Paper className="p-8 max-w-md z-10">
           <Text variant="h1" className="mb-2">
             Sign in to your account
           </Text>
@@ -100,11 +100,27 @@ export const Login: React.FC = () => {
             </Form>
           </Formik>
         </Paper>
+
+        <img
+          src="/images/login-decor.svg"
+          alt="login-decor.svg"
+          className="absolute -bottom-0.5 left-4"
+        />
       </div>
-      <div
-        className="w-1/2 bg-cover bg-left"
-        style={{ backgroundImage: 'url(/images/banner.jpg)' }}
-      />
+
+      <div className="w-1/2 bg-white p-8 flex flex-col justify-center items-center">
+        <div className="max-w-xl">
+          <img
+            src="/images/login.svg"
+            alt="login.svg"
+            className="max-w-full h-auto"
+          />
+          <Text className="text-2xl mt-6">
+            Your colleagues are already there,
+            <br /> sign in to connect with them
+          </Text>
+        </div>
+      </div>
     </section>
   )
 }
