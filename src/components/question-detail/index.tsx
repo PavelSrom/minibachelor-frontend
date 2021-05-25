@@ -46,7 +46,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
           'w-0 invisible': !question,
         })}
       >
-        <Paper className="p-6 sticky top-20">
+        <Paper className="p-6 sticky" style={{ top: 88 }}>
           <div className="flex justify-between items-start mb-4">
             <div className="flex">
               <Avatar className="w-16 h-16" />
