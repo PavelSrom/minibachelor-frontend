@@ -70,7 +70,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
                 </Text>
                 {project?.createdAt && (
                   <Text variant="body2">
-                    {format(new Date(project!.createdAt), 'dd.MM.yyyy, hh:MM')}
+                    {format(new Date(project!.createdAt), 'dd.MM.yyyy, HH:mm')}
                   </Text>
                 )}
                 <div>

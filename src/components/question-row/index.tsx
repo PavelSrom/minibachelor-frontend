@@ -19,33 +19,39 @@ export const QuestionRow: React.FC<Props> = memo(
 
     return (
       <Paper className="px-2 py-4 grid grid-cols-12">
-        <div className="col-span-6 px-2 flex items-center">
+        <div
+          className={clsx('col-span-6 px-2 flex items-center', {
+            'md:col-span-11': detailOpen,
+          })}
+        >
           <Text variant="body" className="font-semibold overflow-ellipsis">
             {question.title}
           </Text>
         </div>
+
         <div
-          className={clsx('col-span-6 px-2 flex items-center', {
-            'justify-between': !detailOpen,
-            'justify-end': detailOpen,
+          className={clsx('col-span-3 px-2 flex items-center', {
+            hidden: detailOpen,
           })}
         >
-          {!detailOpen && (
-            <>
-              <div className="flex items-center">
-                <Avatar className="w-8 h-8 mr-2">{userInitials}</Avatar>
-                <Text variant="body2">
-                  by{' '}
-                  <span className="font-semibold">{`${question.userName} ${question.userSurname}`}</span>
-                </Text>
-              </div>
+          <Avatar className="w-8 h-8 mr-2">{userInitials}</Avatar>
+          <Text variant="body2">
+            by{' '}
+            <span className="font-semibold">{`${question.userName} ${question.userSurname}`}</span>
+          </Text>
+        </div>
 
-              <Text variant="body2">
-                {format(new Date(question.createdAt), 'dd.MM.yyyy, hh:mm')}
-              </Text>
-            </>
-          )}
+        <div
+          className={clsx('col-span-2 h-full flex items-center', {
+            hidden: detailOpen,
+          })}
+        >
+          <Text variant="body2">
+            {format(new Date(question.createdAt), 'dd.MM.yyyy, HH:mm')}
+          </Text>
+        </div>
 
+        <div className="col-span-1 flex justify-end">
           <Tooltip title="View detail">
             <IconButton size="small" color="secondary" onClick={onDetailClick}>
               <AddCircleOutline />

@@ -20,17 +20,9 @@ import { QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { Text } from '../styleguide'
 import { NewQuestionModal } from '../components/new-question-modal'
+import { questionSkeletons } from '../components/skeletons'
 import { useAuth } from '../contexts/auth'
 import { schools } from '../utils/schools'
-import { QuestionRowSkeleton } from '../components/skeletons/question-row'
-
-const questionSkeleton = (
-  <div className="space-y-2">
-    {[...new Array(8).keys()].map(key => (
-      <QuestionRowSkeleton key={key} />
-    ))}
-  </div>
-)
 
 export const Questions: React.FC = () => {
   const { user } = useAuth()
@@ -98,7 +90,7 @@ export const Questions: React.FC = () => {
       </div>
       <Divider className="mt-2 mb-6" />
 
-      {questionsQuery.isLoading && questionSkeleton}
+      {questionsQuery.isLoading && questionSkeletons(8, true)}
       {questionsQuery.isError && <p>Error :(</p>}
 
       {questionsQuery.isSuccess && questionsQuery.data && (

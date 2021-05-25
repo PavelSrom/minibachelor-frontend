@@ -12,13 +12,13 @@ import { MyClassmates } from './my-classmates'
 import { MyTeachers } from './my-teachers'
 import { MyQuestions } from './my-questions'
 import { MyProjects } from './my-projects'
+import { ManageAccount } from './manage-account'
 
-const INFO = 0
-const SETTINGS = 1
-const CLASSMATES = 2
-const TEACHERS = 3
-const QUESTIONS = 4
-const PROJECTS = 5
+const CLASSMATES = 0
+const TEACHERS = 1
+const QUESTIONS = 2
+const PROJECTS = 3
+const ACCOUNT = 4
 
 export const Dashboard: React.FC = () => {
   const history = useHistory()
@@ -44,12 +44,11 @@ export const Dashboard: React.FC = () => {
         </Tabs>
       </Paper>
 
-      {tabValue === INFO && null}
-      {tabValue === SETTINGS && null}
       {tabValue === CLASSMATES && <MyClassmates />}
       {tabValue === TEACHERS && <MyTeachers />}
       {tabValue === QUESTIONS && <MyQuestions />}
       {tabValue === PROJECTS && <MyProjects />}
+      {tabValue === ACCOUNT && <ManageAccount />}
 
       <SpeedDial
         ariaLabel="SpeedDial"

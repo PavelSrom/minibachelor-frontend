@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { ProjectCard } from '../../components/project-card'
 import { ProjectDetail } from '../../components/project-detail'
+import { projectSkeletons } from '../../components/skeletons'
 import { useAuth } from '../../contexts/auth'
 import { useProjects } from '../../hooks/projects'
 import { Text } from '../../styleguide'
@@ -13,7 +14,7 @@ export const MyProjects: React.FC = () => {
 
   const projectsQuery = useProjects({ user: user?._id })
 
-  if (projectsQuery.isLoading) return <p>Loading...</p>
+  if (projectsQuery.isLoading) return projectSkeletons()
   if (projectsQuery.isError) return <p>Error :(</p>
 
   return (

@@ -6,6 +6,7 @@ import { useQuestions } from '../../hooks/questions'
 import { Text } from '../../styleguide'
 import { QuestionDTO } from '../../types/api'
 import { QuestionDetail } from '../../components/question-detail'
+import { questionSkeletons } from '../../components/skeletons'
 
 export const MyQuestions: React.FC = () => {
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
@@ -18,7 +19,7 @@ export const MyQuestions: React.FC = () => {
     }
   )
 
-  if (questionsQuery.isLoading) return <p>Loading...</p>
+  if (questionsQuery.isLoading) return questionSkeletons()
   if (questionsQuery.isError) return <p>Error :(</p>
 
   return (
