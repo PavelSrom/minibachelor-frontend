@@ -1,19 +1,10 @@
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import SentimentVerySatisfied from '@material-ui/icons/SentimentVerySatisfied'
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle'
-import Settings from '@material-ui/icons/Settings'
 import QuestionAnswer from '@material-ui/icons/QuestionAnswer'
 import ListAlt from '@material-ui/icons/ListAlt'
 
 export const tabs: { label: string; icon: JSX.Element }[] = [
-  {
-    label: 'My information',
-    icon: <AccountCircle />,
-  },
-  {
-    label: 'Settings',
-    icon: <Settings />,
-  },
   {
     label: 'My classmates',
     icon: <SentimentVerySatisfied />,
@@ -29,5 +20,9 @@ export const tabs: { label: string; icon: JSX.Element }[] = [
   {
     label: 'My projects',
     icon: <ListAlt />,
+  },
+  {
+    label: 'Manage account',
+    icon: <AccountCircle />,
   },
 ]
