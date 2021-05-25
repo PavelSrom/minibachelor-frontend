@@ -71,7 +71,7 @@ export const WithLayout: React.FC = ({ children }) => {
                 'bg-theme-lightgray': isCurrentPage,
               })}
               TouchRippleProps={{
-                className: clsx('', {
+                className: clsx({
                   'border-l-4 border-theme-secondary': isCurrentPage,
                 }),
               }}
@@ -107,7 +107,7 @@ export const WithLayout: React.FC = ({ children }) => {
           </Text>
           {!!user && (
             <IconButton edge="end" onClick={e => setAnchorEl(e.currentTarget)}>
-              <Avatar className="bg-red-500">
+              <Avatar className="bg-theme-secondary">
                 {user.name[0].toUpperCase() + user.surname[0].toUpperCase()}
               </Avatar>
             </IconButton>
@@ -122,7 +122,7 @@ export const WithLayout: React.FC = ({ children }) => {
           </Menu>
         </Toolbar>
       </AppBar>
-      <nav className={classes.drawer} aria-label="mailbox folders">
+      <nav className={classes.drawer}>
         <Hidden xsDown implementation="css">
           <Drawer
             classes={{
