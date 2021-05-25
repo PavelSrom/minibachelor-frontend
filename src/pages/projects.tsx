@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import clsx from 'clsx'
 import {
   Container,
@@ -11,6 +11,7 @@ import {
   Divider,
   TextField,
 } from '@material-ui/core'
+import Close from '@material-ui/icons/Close'
 import Search from '@material-ui/icons/Search'
 import PostAdd from '@material-ui/icons/PostAdd'
 import { Text } from '../styleguide'
@@ -25,39 +26,14 @@ import { projectSkeletons } from '../components/skeletons'
 export const Projects: React.FC = () => {
   const { user } = useAuth()
 
-  const [projectsToRender, setProjectsToRender] = useState<ProjectDTO[]>([])
   const [detailOpen, setDetailOpen] = useState<ProjectDTO | undefined>()
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [sortBy, setSortBy] = useState<string>('newest')
-  const [search, setSearch] = useState<string>('')
 
-  const projectsQuery = useProjects(
-    {
-      school: user?.school,
-      programme: user?.programme,
-    },
-    {
-      enabled: !!user,
-    }
-  )
-
-  // filter projects by what is in search - title or description
-  useEffect(() => {
-    if (projectsQuery.data) {
-      if (!!search) {
-        setProjectsToRender(
-          projectsQuery.data.filter(q => {
-            return (
-              q.title.toLowerCase().includes(search.toLowerCase()) ||
-              q.description?.toLowerCase().includes(search.toLowerCase())
-            )
-          })
-        )
-      } else {
-        setProjectsToRender(projectsQuery.data)
-      }
-    }
-  }, [projectsQuery.data, search])
+  const projectsQuery = useProjects({
+    school: user?.school,
+    programme: user?.programme,
+  })
 
   return (
     <Container maxWidth="lg" className="py-8">
@@ -68,15 +44,13 @@ export const Projects: React.FC = () => {
           component="form"
           className="w-full max-w-md flex items-center p-1"
         >
-          <IconButton disableRipple>
+          <IconButton>
             <Search />
           </IconButton>
-          <InputBase
-            className="ml-2 flex-1"
-            placeholder="Search projects..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
+          <InputBase className="ml-2 flex-1" placeholder="Search projects..." />
+          <IconButton>
+            <Close />
+          </IconButton>
         </Paper>
 
         <div className="flex items-end space-x-4">
@@ -106,9 +80,9 @@ export const Projects: React.FC = () => {
               'w-1/2': detailOpen,
             })}
           >
-            {projectsToRender.length > 0 ? (
+            {projectsQuery.data.length > 0 ? (
               <div className="grid grid-cols-12 gap-6">
-                {projectsToRender.map(project => (
+                {projectsQuery.data.map(project => (
                   <div
                     key={project._id}
                     className={clsx({
