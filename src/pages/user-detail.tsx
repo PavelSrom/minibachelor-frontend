@@ -6,10 +6,13 @@ import { Text } from '../styleguide'
 import { useQuestions } from '../hooks/questions'
 import { useAuth } from '../contexts/auth'
 import { QuestionRow } from '../components/question-row'
-import { QuestionDTO } from '../types/api'
+import { ProjectDTO, QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { useColleagueDetail } from '../hooks/colleagues'
 import { QuestionRowSkeleton } from '../components/skeletons/question-row'
+import { useProjects } from '../hooks/projects'
+import { ProjectCard } from '../components/project-card'
+import { ProjectDetail } from '../components/project-detail'
 
 const QUESTIONS = 0
 const PROJECTS = 1
@@ -25,7 +28,8 @@ const questionSkeleton = (
 export const UserDetail: React.FC = () => {
   const { user } = useAuth()
   const params = useParams<{ id: string }>()
-  const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
+  const [qDetailOpen, setQDetailOpen] = useState<QuestionDTO | undefined>()
+  const [pDetailOpen, setPDetailOpen] = useState<ProjectDTO | undefined>()
   const [tabValue, setTabValue] = useState<0 | 1>(QUESTIONS)
 
   const detailQuery = useColleagueDetail(params.id, {
@@ -37,6 +41,10 @@ export const UserDetail: React.FC = () => {
     {
       enabled: tabValue === QUESTIONS,
     }
+  )
+  const projectsQuery = useProjects(
+    { user: params.id },
+    { enabled: tabValue === PROJECTS }
   )
 
   const { data: colleague } = detailQuery
@@ -56,8 +64,8 @@ export const UserDetail: React.FC = () => {
         <div className="flex">
           <div
             className={clsx('transition-all duration-250', {
-              'w-full': !detailOpen,
-              'w-1/2': detailOpen,
+              'w-full': !qDetailOpen && !pDetailOpen,
+              'w-1/2': qDetailOpen || pDetailOpen,
             })}
           >
             <Paper className="p-6 max-w-3xl mx-auto">
@@ -80,7 +88,11 @@ export const UserDetail: React.FC = () => {
               <Tabs
                 indicatorColor="primary"
                 value={tabValue}
-                onChange={(_e, newValue) => setTabValue(newValue)}
+                onChange={(_e, newValue) => {
+                  setTabValue(newValue)
+                  setQDetailOpen(undefined)
+                  setPDetailOpen(undefined)
+                }}
               >
                 <Tab value={QUESTIONS} label="Questions" />
                 <Tab
@@ -105,8 +117,8 @@ export const UserDetail: React.FC = () => {
                             <QuestionRow
                               key={q._id}
                               question={q}
-                              detailOpen={!!detailOpen}
-                              onDetailClick={() => setDetailOpen(q)}
+                              detailOpen={!!qDetailOpen}
+                              onDetailClick={() => setQDetailOpen(q)}
                             />
                           ))}
                         </div>
@@ -120,12 +132,46 @@ export const UserDetail: React.FC = () => {
                 </>
               )}
 
-              {tabValue === PROJECTS && null}
+              {tabValue === PROJECTS && (
+                <>
+                  {projectsQuery.isLoading && <p>Loading...</p>}
+                  {projectsQuery.isError && <p>Error :(</p>}
+
+                  {projectsQuery.isSuccess && projectsQuery.data && (
+                    <>
+                      {projectsQuery.data.length > 0 ? (
+                        <div className="grid grid-cols-12 gap-6">
+                          {projectsQuery.data.map(project => (
+                            <div
+                              key={project._id}
+                              className={clsx({
+                                'col-span-6': !pDetailOpen,
+                                'col-span-12': pDetailOpen,
+                              })}
+                            >
+                              <ProjectCard
+                                project={project}
+                                onDetailClick={proj => setPDetailOpen(proj)}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <Text>(There are no projects to show)</Text>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </Paper>
           </div>
           <QuestionDetail
-            question={detailOpen}
-            onClose={() => setDetailOpen(undefined)}
+            question={qDetailOpen}
+            onClose={() => setQDetailOpen(undefined)}
+          />
+          <ProjectDetail
+            project={pDetailOpen}
+            onClose={() => setPDetailOpen(undefined)}
           />
         </div>
       )}

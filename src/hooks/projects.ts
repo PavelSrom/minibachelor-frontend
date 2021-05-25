@@ -6,10 +6,18 @@ import {
   UseQueryOptions,
 } from 'react-query'
 import { deleteProject, getProjects, uploadProject } from '../api/projects'
+import { ProjectFilters } from '../types'
 import { ProjectDTO } from '../types/api'
 
-export const useProjects = (options?: UseQueryOptions<ProjectDTO[]>) =>
-  useQuery('projects', getProjects, options)
+export const useProjects = (
+  filters: ProjectFilters,
+  options?: UseQueryOptions<ProjectDTO[]>
+) =>
+  useQuery(
+    ['projects', filters.programme, filters.school, filters.user],
+    () => getProjects(filters),
+    options
+  )
 
 export const useNewProject = () => {
   const { enqueueSnackbar } = useSnackbar()

@@ -27,3 +27,9 @@ export type QuestionFilters = {
   programme?: string
   user?: string
 }
+
+export type ProjectFilters = {
+  school?: string
+  programme?: string
+  user?: string
+}

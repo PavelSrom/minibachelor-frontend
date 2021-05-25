@@ -20,13 +20,19 @@ import { useProjects } from '../hooks/projects'
 import { ProjectCard } from '../components/project-card'
 import { ProjectDTO } from '../types/api'
 import { ProjectDetail } from '../components/project-detail'
+import { useAuth } from '../contexts/auth'
 
 export const Projects: React.FC = () => {
+  const { user } = useAuth()
+
   const [detailOpen, setDetailOpen] = useState<ProjectDTO | undefined>()
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [sortBy, setSortBy] = useState<string>('newest')
 
-  const projectsQuery = useProjects()
+  const projectsQuery = useProjects({
+    school: user?.school,
+    programme: user?.programme,
+  })
 
   return (
     <Container maxWidth="lg" className="py-8">
@@ -93,7 +99,7 @@ export const Projects: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <Text>(There are no projects)</Text>
+              <Text>(There are no projects to show)</Text>
             )}
           </div>
 
