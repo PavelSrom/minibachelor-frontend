@@ -144,7 +144,10 @@ export const UserDetail: React.FC = () => {
                           {projectsQuery.data.map(project => (
                             <div
                               key={project._id}
-                              className="col-span-12 xl:col-span-6"
+                              className={clsx({
+                                'col-span-6': !pDetailOpen,
+                                'col-span-12': pDetailOpen,
+                              })}
                             >
                               <ProjectCard
                                 project={project}
