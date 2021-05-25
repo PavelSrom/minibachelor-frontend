@@ -1,5 +1,6 @@
 import { Avatar, Paper } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import { userSkeletons } from '../../components/skeletons'
 import { useAuth } from '../../contexts/auth'
 import { useColleagues } from '../../hooks/colleagues'
 import { Text } from '../../styleguide'
@@ -10,7 +11,7 @@ export const MyTeachers: React.FC = () => {
 
   const teachersQuery = useColleagues('teacher')
 
-  if (teachersQuery.isLoading) return <p>Loading...</p>
+  if (teachersQuery.isLoading) return userSkeletons()
   if (teachersQuery.isError) return <p>Error :(</p>
 
   // filter out myself from the list

@@ -9,21 +9,13 @@ import { QuestionRow } from '../components/question-row'
 import { ProjectDTO, QuestionDTO } from '../types/api'
 import { QuestionDetail } from '../components/question-detail'
 import { useColleagueDetail } from '../hooks/colleagues'
-import { QuestionRowSkeleton } from '../components/skeletons/question-row'
+import { projectSkeletons, questionSkeletons } from '../components/skeletons'
 import { useProjects } from '../hooks/projects'
 import { ProjectCard } from '../components/project-card'
 import { ProjectDetail } from '../components/project-detail'
 
 const QUESTIONS = 0
 const PROJECTS = 1
-
-const questionSkeleton = (
-  <div className="space-y-6">
-    {[...new Array(4).keys()].map(key => (
-      <QuestionRowSkeleton key={key} />
-    ))}
-  </div>
-)
 
 export const UserDetail: React.FC = () => {
   const { user } = useAuth()
@@ -105,7 +97,7 @@ export const UserDetail: React.FC = () => {
 
               {tabValue === QUESTIONS && (
                 <>
-                  {questionsQuery.isLoading && questionSkeleton}
+                  {questionsQuery.isLoading && questionSkeletons(4)}
                   {questionsQuery.error && <p>Error :(</p>}
 
                   {questionsQuery.isSuccess && questionsQuery.data && (
@@ -134,7 +126,7 @@ export const UserDetail: React.FC = () => {
 
               {tabValue === PROJECTS && (
                 <>
-                  {projectsQuery.isLoading && <p>Loading...</p>}
+                  {projectsQuery.isLoading && projectSkeletons(4, 2)}
                   {projectsQuery.isError && <p>Error :(</p>}
 
                   {projectsQuery.isSuccess && projectsQuery.data && (

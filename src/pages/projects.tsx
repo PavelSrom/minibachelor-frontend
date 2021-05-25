@@ -21,6 +21,7 @@ import { ProjectCard } from '../components/project-card'
 import { ProjectDTO } from '../types/api'
 import { ProjectDetail } from '../components/project-detail'
 import { useAuth } from '../contexts/auth'
+import { projectSkeletons } from '../components/skeletons'
 
 export const Projects: React.FC = () => {
   const { user } = useAuth()
@@ -68,7 +69,7 @@ export const Projects: React.FC = () => {
       </div>
       <Divider className="mt-2 mb-6" />
 
-      {projectsQuery.isLoading && <p>Loading...</p>}
+      {projectsQuery.isLoading && projectSkeletons()}
       {projectsQuery.isError && <p>Error :(</p>}
 
       {projectsQuery.isSuccess && projectsQuery.data && (
