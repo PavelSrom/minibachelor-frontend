@@ -69,7 +69,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
                 </Text>
                 {question?.createdAt && (
                   <Text variant="body2">
-                    {format(new Date(question!.createdAt), 'dd.MM.yyyy, hh:MM')}
+                    {format(new Date(question!.createdAt), 'dd.MM.yyyy, HH:mm')}
                   </Text>
                 )}
               </div>

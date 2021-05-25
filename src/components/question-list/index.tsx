@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
+import startOfDay from 'date-fns/startOfDay'
+import startOfWeek from 'date-fns/startOfWeek'
+import startOfMonth from 'date-fns/startOfMonth'
 import { QuestionDTO } from '../../types/api'
 import { Text } from '../../styleguide'
 import { QuestionRow } from '../question-row'
@@ -17,7 +19,11 @@ export const QuestionList: React.FC<Props> = ({
 }) => {
   const now = new Date()
 
-  const renderQuestions = (questions: QuestionDTO[]) => {
+  const startOfToday = startOfDay(now)
+  const startOfThisWeek = startOfWeek(now, { weekStartsOn: 1 }) // week starts Monday
+  const startOfThisMonth = startOfMonth(now)
+
+  const renderQuestions = (questions: QuestionDTO[]): JSX.Element => {
     return (
       <div className="space-y-2">
         {questions.map(q => (
@@ -32,41 +38,80 @@ export const QuestionList: React.FC<Props> = ({
     )
   }
 
+  /**
+   * today = question posted today, from 00:00
+   * this week = questions posted from week beginning until yesterday 23:59:59
+   * this month = questions posted from month beginning until start of this week
+   * older = everything else
+   */
+
   const questionsToday = useMemo(
-    () =>
-      questions.filter(
-        q => differenceInCalendarDays(new Date(q.createdAt), now) === 0
-      ),
+    () => questions.filter(q => new Date(q.createdAt) >= startOfToday),
     // eslint-disable-next-line
     [questions]
   )
   const questionsThisWeek = useMemo(
     () =>
       questions.filter(
-        q => differenceInCalendarDays(new Date(q.createdAt), now) < 7
+        q =>
+          new Date(q.createdAt) >= startOfThisWeek &&
+          new Date(q.createdAt) < startOfToday
       ),
+    // eslint-disable-next-line
+    [questions]
+  )
+  const questionsThisMonth = useMemo(
+    () =>
+      questions.filter(
+        q =>
+          new Date(q.createdAt) >= startOfThisMonth &&
+          new Date(q.createdAt) < startOfThisWeek
+      ),
+    // eslint-disable-next-line
+    [questions]
+  )
+  const olderQuestions = useMemo(
+    () => questions.filter(q => new Date(q.createdAt) < startOfThisMonth),
     // eslint-disable-next-line
     [questions]
   )
 
   return (
     <>
-      <Text variant="h2" className="mt-6 mb-2">
-        Today
+      <Text variant="h2" className="mb-2">
+        Today ({questionsToday.length})
       </Text>
       {questionsToday.length > 0 ? (
         renderQuestions(questionsToday)
       ) : (
-        <Text>(There are no questions for today)</Text>
+        <Text>(No questions have been posted today)</Text>
       )}
 
-      <Text variant="h2" className="mt-6 mb-2">
-        This week
+      <Text variant="h2" className="mt-8 mb-2">
+        This week ({questionsThisWeek.length})
       </Text>
       {questionsThisWeek.length > 0 ? (
         renderQuestions(questionsThisWeek)
       ) : (
-        <Text>(There are no questions this week)</Text>
+        <Text>(No questions have been posted this week)</Text>
+      )}
+
+      <Text variant="h2" className="mt-8 mb-2">
+        This month ({questionsThisMonth.length})
+      </Text>
+      {questionsThisMonth.length > 0 ? (
+        renderQuestions(questionsThisMonth)
+      ) : (
+        <Text>(No questions have been posted this month)</Text>
+      )}
+
+      <Text variant="h2" className="mt-8 mb-2">
+        Older ({olderQuestions.length})
+      </Text>
+      {olderQuestions.length > 0 ? (
+        renderQuestions(olderQuestions)
+      ) : (
+        <Text>(No questions have been posted earlier)</Text>
       )}
     </>
   )
