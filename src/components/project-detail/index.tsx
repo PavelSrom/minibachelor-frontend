@@ -32,11 +32,12 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
 
   const { mutateAsync: deleteProject, isLoading: isDeletingProject } =
     useDeleteProject()
-  const commentsQuery = useComments(project?._id || '', {
-    enabled: !!project?._id,
-  })
+  const commentsQuery = useComments(
+    { projectId: project?.id ?? 0 },
+    { enabled: !!project?.id }
+  )
 
-  const notMyProject = user?._id !== project?.userId
+  const notMyProject = user?.id !== project?.user
 
   return (
     <Grow in={!!project}>
@@ -61,16 +62,16 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
                     })}
                     onClick={() =>
                       notMyProject
-                        ? history.push(`/user/${project?.userId}`)
+                        ? history.push(`/user/${project?.user}`)
                         : null
                     }
                   >
                     {project?.userName} {project?.userSurname}
                   </span>
                 </Text>
-                {project?.createdAt && (
+                {project?.created_at && (
                   <Text variant="body2">
-                    {format(new Date(project!.createdAt), 'dd.MM.yyyy, HH:mm')}
+                    {format(new Date(project!.created_at), 'dd.MM.yyyy, HH:mm')}
                   </Text>
                 )}
                 <div>
@@ -104,7 +105,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
               </div>
             </div>
             <div className="space-x-2">
-              {project?.userId === user?._id && (
+              {project?.user === user?.id && (
                 <Tooltip title="Delete project">
                   <IconButton
                     size="small"
@@ -133,7 +134,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
 
           {commentsQuery.isSuccess && commentsQuery.data && (
             <CommentList
-              entityId={project!._id}
+              projectId={project!.id}
               comments={commentsQuery.data}
             />
           )}
@@ -143,7 +144,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
           open={deleteDialogOpen}
           onClose={() => setDeleteDialogOpen(false)}
           onConfirm={() =>
-            deleteProject(project!._id).then(() => {
+            deleteProject(project!.id).then(() => {
               setDeleteDialogOpen(false)
               onClose()
             })

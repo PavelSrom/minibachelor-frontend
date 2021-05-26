@@ -2,6 +2,7 @@ import { Dialog, IconButton } from '@material-ui/core'
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useAuth } from '../../contexts/auth'
 import { useNewProject } from '../../hooks/projects'
 import { Text, TextField, Button } from '../../styleguide'
 import { NewProjectPayload } from '../../types/payloads'
@@ -29,11 +30,12 @@ type Props = {
 }
 
 export const NewProjectModal: React.FC<Props> = ({ open, onClose }) => {
+  const { user } = useAuth()
   const { mutateAsync: uploadProject, isLoading: isUploadingProject } =
     useNewProject()
 
   const handleSubmit = (values: NewProjectPayload): void => {
-    uploadProject(values).then(() => onClose())
+    uploadProject({ ...values, user: user!.id }).then(() => onClose())
   }
 
   return (

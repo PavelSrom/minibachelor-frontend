@@ -27,5 +27,5 @@ export type NewProjectPayload = {
 }
 
 export type NewCommentPayload = {
-  text: string
+  comment: string
 }

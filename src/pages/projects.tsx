@@ -110,7 +110,7 @@ export const Projects: React.FC = () => {
               <div className="grid grid-cols-12 gap-6">
                 {projectsToRender.map(project => (
                   <div
-                    key={project._id}
+                    key={project.id}
                     className={clsx({
                       'lg:col-span-6': !detailOpen,
                       'xl:col-span-3': !detailOpen,

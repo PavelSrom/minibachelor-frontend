@@ -36,7 +36,7 @@ export const Questions: React.FC = () => {
     {
       school,
       programme: user?.programme,
-      isPublic: user?.school !== school ? true : null,
+      isPublic: user?.school !== school ? 'True' : null,
     },
     { enabled: !!user }
   )

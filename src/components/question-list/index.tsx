@@ -28,7 +28,7 @@ export const QuestionList: React.FC<Props> = ({
       <div className="space-y-2">
         {questions.map(q => (
           <QuestionRow
-            key={q._id}
+            key={q.id}
             question={q}
             onDetailClick={() => onDetailClick(q)}
             detailOpen={detailOpen}
@@ -46,7 +46,7 @@ export const QuestionList: React.FC<Props> = ({
    */
 
   const questionsToday = useMemo(
-    () => questions.filter(q => new Date(q.createdAt) >= startOfToday),
+    () => questions.filter(q => new Date(q.created_at) >= startOfToday),
     // eslint-disable-next-line
     [questions]
   )
@@ -54,8 +54,8 @@ export const QuestionList: React.FC<Props> = ({
     () =>
       questions.filter(
         q =>
-          new Date(q.createdAt) >= startOfThisWeek &&
-          new Date(q.createdAt) < startOfToday
+          new Date(q.created_at) >= startOfThisWeek &&
+          new Date(q.created_at) < startOfToday
       ),
     // eslint-disable-next-line
     [questions]
@@ -64,14 +64,14 @@ export const QuestionList: React.FC<Props> = ({
     () =>
       questions.filter(
         q =>
-          new Date(q.createdAt) >= startOfThisMonth &&
-          new Date(q.createdAt) < startOfThisWeek
+          new Date(q.created_at) >= startOfThisMonth &&
+          new Date(q.created_at) < startOfThisWeek
       ),
     // eslint-disable-next-line
     [questions]
   )
   const olderQuestions = useMemo(
-    () => questions.filter(q => new Date(q.createdAt) < startOfThisMonth),
+    () => questions.filter(q => new Date(q.created_at) < startOfThisMonth),
     // eslint-disable-next-line
     [questions]
   )

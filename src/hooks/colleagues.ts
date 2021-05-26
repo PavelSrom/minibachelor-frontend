@@ -1,13 +1,19 @@
 import { useQuery, UseQueryOptions } from 'react-query'
 import { getColleagueDetail, getColleagues } from '../api/colleagues'
+import { UserFilters } from '../types'
 import { UserDTO } from '../types/api'
 
 export const useColleagues = (
-  role: 'student' | 'teacher',
+  filters: UserFilters,
   options?: UseQueryOptions<UserDTO[]>
-) => useQuery(['colleagues', role], () => getColleagues(role), options)
+) =>
+  useQuery(
+    ['colleagues', filters.id, filters.school, filters.programme, filters.role],
+    () => getColleagues(filters),
+    options
+  )
 
 export const useColleagueDetail = (
-  id: string,
+  id: number,
   options?: UseQueryOptions<UserDTO>
 ) => useQuery(['userDetail', id], () => getColleagueDetail(id), options)

@@ -7,6 +7,7 @@ import {
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useAuth } from '../../contexts/auth'
 import { useNewQuestion } from '../../hooks/questions'
 import { Text, TextField, Button } from '../../styleguide'
 import { NewQuestionPayload } from '../../types/payloads'
@@ -34,11 +35,12 @@ export const NewQuestionModal: React.FC<Props> = ({
   onClose,
   onCreated,
 }) => {
+  const { user } = useAuth()
   const { mutateAsync: postQuestion, isLoading: isPostingQuestion } =
     useNewQuestion()
 
   const handleSubmit = (values: NewQuestionPayload): void => {
-    postQuestion(values).then(() => {
+    postQuestion({ ...values, user: user!.id }).then(() => {
       onCreated?.()
       onClose()
     })

@@ -12,7 +12,7 @@ export const MyProjects: React.FC = () => {
   const [detailOpen, setDetailOpen] = useState<ProjectDTO | undefined>()
   const { user } = useAuth()
 
-  const projectsQuery = useProjects({ user: user?._id })
+  const projectsQuery = useProjects({ user: user!.id }, { enabled: !!user?.id })
 
   if (projectsQuery.isLoading) return projectSkeletons()
   if (projectsQuery.isError) return <p>Error :(</p>
@@ -29,7 +29,7 @@ export const MyProjects: React.FC = () => {
           <div className="grid grid-cols-12 gap-6">
             {projectsQuery.data!.map(project => (
               <div
-                key={project._id}
+                key={project.id}
                 className={clsx({
                   'lg:col-span-6': !detailOpen,
                   'xl:col-span-3': !detailOpen,

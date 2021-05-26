@@ -1,9 +1,10 @@
 import { Programme, School } from '.'
 
 export type UserDTO = {
-  _id: string
+  id: number
   name: string
   surname: string
+  username: string
   email: string
   role: 'student' | 'teacher'
   school: School
@@ -11,8 +12,8 @@ export type UserDTO = {
 }
 
 export type QuestionDTO = {
-  _id: string
-  userId: string
+  id: number
+  user: number
   userName: string
   userSurname: string
   school: School
@@ -20,12 +21,12 @@ export type QuestionDTO = {
   title: string
   description: string
   isPublic: boolean
-  createdAt: string
+  created_at: string
 }
 
 export type ProjectDTO = {
-  _id: string
-  userId: string
+  id: number
+  user: number
   userName: string
   userSurname: string
   school: School
@@ -34,15 +35,15 @@ export type ProjectDTO = {
   description?: string
   demoUrl: string
   otherUrl?: string
-  createdAt: string
+  created_at: string
 }
 
 export type CommentDTO = {
-  _id: string
-  userId: string
-  entityId: string
+  id: number
+  user: number
+  entityId: number
   userName: string
   userSurname: string
-  text: string
-  createdAt: string
+  comment: string
+  created_at: string
 }

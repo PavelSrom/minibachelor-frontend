@@ -9,23 +9,27 @@ export const MyTeachers: React.FC = () => {
   const { user } = useAuth()
   const history = useHistory()
 
-  const teachersQuery = useColleagues('teacher')
+  const teachersQuery = useColleagues({
+    role: 'teacher',
+    school: user?.school,
+    programme: user?.programme,
+  })
 
-  if (teachersQuery.isLoading) return userSkeletons()
+  if (teachersQuery.isLoading || !teachersQuery.data) return userSkeletons()
   if (teachersQuery.isError) return <p>Error :(</p>
 
   // filter out myself from the list
-  const teachers = teachersQuery.data?.filter(cm => cm._id !== user?._id)
+  const teachers = teachersQuery.data?.filter(cm => cm.id !== user?.id)
 
   return (
     <>
-      {teachersQuery.data!.length > 0 ? (
+      {teachers.length > 0 ? (
         <div className="grid grid-cols-12 gap-6">
           {teachers!.map(user => (
-            <div key={user._id} className="col-span-3">
+            <div key={user.id} className="col-span-3">
               <Paper
                 className="p-6 flex flex-col items-center cursor-pointer"
-                onClick={() => history.push(`/user/${user._id}`)}
+                onClick={() => history.push(`/user/${user.id}`)}
               >
                 <Avatar className="w-20 h-20 mb-4" />
                 <Text variant="h2">{user.name + ' ' + user.surname}</Text>

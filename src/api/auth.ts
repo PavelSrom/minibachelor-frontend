@@ -3,23 +3,26 @@ import { API_CONFIG } from './config'
 import { UserDTO } from '../types/api'
 import { RegisterPayload, LoginPayload } from '../types/payloads'
 
-export const refreshToken = (): Promise<{ token: string }> =>
-  axios.get(`${API_CONFIG.BASE_URL}/auth`).then(({ data }) => data)
-
-export const getUserProfile = (): Promise<UserDTO> =>
-  axios.get(`${API_CONFIG.BASE_URL}/auth/profile`).then(({ data }) => data)
-
-export const registerUser = (
-  formData: RegisterPayload
-): Promise<{ token: string }> =>
+export const getUserProfile = (email: string): Promise<UserDTO> =>
   axios
-    .post(`${API_CONFIG.BASE_URL}/auth/register`, formData)
-    .then(({ data }) => data)
+    .get(`${API_CONFIG.BASE_URL}/accounts/?email=${email}`)
+    .then(({ data }) => data[0])
 
-export const loginUser = (formData: LoginPayload): Promise<{ token: string }> =>
+export const registerUser = (formData: RegisterPayload): Promise<UserDTO> => {
+  return axios
+    .post(`${API_CONFIG.BASE_URL}/accounts/`, {
+      ...formData,
+      username: `${formData.name} ${formData.surname}`,
+    })
+    .then(({ data }) => data)
+}
+
+export const loginUser = (
+  formData: LoginPayload
+): Promise<{ refresh: string; access: string }> =>
+  axios.post(`${API_CONFIG.BASE_URL}/auth/`, formData).then(({ data }) => data)
+
+export const deleteUser = (id: number): Promise<void> =>
   axios
-    .post(`${API_CONFIG.BASE_URL}/auth/login`, formData)
+    .delete(`${API_CONFIG.BASE_URL}/accounts/${id}/`)
     .then(({ data }) => data)
-
-export const deleteUser = (): Promise<{ message: string }> =>
-  axios.delete(`${API_CONFIG.BASE_URL}/auth`).then(({ data }) => data)

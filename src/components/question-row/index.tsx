@@ -47,7 +47,7 @@ export const QuestionRow: React.FC<Props> = memo(
           })}
         >
           <Text variant="body2">
-            {format(new Date(question.createdAt), 'dd.MM.yyyy, HH:mm')}
+            {format(new Date(question.created_at), 'dd.MM.yyyy, HH:mm')}
           </Text>
         </div>
 

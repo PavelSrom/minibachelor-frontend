@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import clsx from 'clsx'
-import { Avatar, Container, Paper, Tabs, Tab, Divider } from '@material-ui/core'
+import {
+  Avatar,
+  Container,
+  Paper,
+  Tabs,
+  Tab,
+  Divider,
+  CircularProgress,
+} from '@material-ui/core'
 import { Text } from '../styleguide'
 import { useQuestions } from '../hooks/questions'
 import { useAuth } from '../contexts/auth'
@@ -24,18 +32,16 @@ export const UserDetail: React.FC = () => {
   const [pDetailOpen, setPDetailOpen] = useState<ProjectDTO | undefined>()
   const [tabValue, setTabValue] = useState<0 | 1>(QUESTIONS)
 
-  const detailQuery = useColleagueDetail(params.id, {
+  const detailQuery = useColleagueDetail(+params.id, {
     enabled: !!params.id,
   })
 
   const questionsQuery = useQuestions(
-    { user: params.id },
-    {
-      enabled: tabValue === QUESTIONS,
-    }
+    { user: +params.id },
+    { enabled: tabValue === QUESTIONS }
   )
   const projectsQuery = useProjects(
-    { user: params.id },
+    { user: +params.id },
     { enabled: tabValue === PROJECTS }
   )
 
@@ -48,8 +54,12 @@ export const UserDetail: React.FC = () => {
     colleague?.programme !== user?.programme
 
   return (
-    <Container maxWidth="lg" className="py-8">
-      {detailQuery.isLoading && <p>Loading...</p>}
+    <Container maxWidth="lg" className="py-8 h-full flex flex-col">
+      {detailQuery.isLoading && (
+        <div className="flex-1 justify-center items-center">
+          <CircularProgress color="primary" />
+        </div>
+      )}
       {detailQuery.isError && <p>Error :(</p>}
 
       {detailQuery.isSuccess && colleague && (
@@ -105,9 +115,8 @@ export const UserDetail: React.FC = () => {
                       {questionsQuery.data.length > 0 ? (
                         <div className="space-y-6">
                           {questionsQuery.data.map(q => (
-                            // TODO: adjust what info the row shows
                             <QuestionRow
-                              key={q._id}
+                              key={q.id}
                               question={q}
                               detailOpen={!!qDetailOpen}
                               onDetailClick={() => setQDetailOpen(q)}
@@ -135,7 +144,7 @@ export const UserDetail: React.FC = () => {
                         <div className="grid grid-cols-12 gap-6">
                           {projectsQuery.data.map(project => (
                             <div
-                              key={project._id}
+                              key={project.id}
                               className={clsx({
                                 'col-span-6': !pDetailOpen,
                                 'col-span-12': pDetailOpen,
