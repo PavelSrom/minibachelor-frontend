@@ -33,10 +33,12 @@ export const Questions: React.FC = () => {
   const [search, setSearch] = useState<string>('')
 
   const questionsQuery = useQuestions(
-    { school, programme: user?.programme },
     {
-      enabled: !!user,
-    }
+      school,
+      programme: user?.programme,
+      isPublic: user?.school !== school ? true : null,
+    },
+    { enabled: !!user }
   )
 
   // filter questions by what is in search - title or description

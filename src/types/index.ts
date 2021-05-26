@@ -26,6 +26,7 @@ export type QuestionFilters = {
   school?: string
   programme?: string
   user?: string
+  isPublic?: boolean | null // so that queryString can remove null
 }
 
 export type ProjectFilters = {

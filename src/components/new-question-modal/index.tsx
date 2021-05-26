@@ -1,4 +1,9 @@
-import { Dialog, IconButton } from '@material-ui/core'
+import {
+  Dialog,
+  IconButton,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core'
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -59,22 +64,37 @@ export const NewQuestionModal: React.FC<Props> = ({
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form className="space-y-8">
-          <TextField name="title" label="Question title" />
-          <TextField
-            name="description"
-            label="Question description"
-            multiline
-          />
-          <Button
-            fullWidth
-            type="submit"
-            color="secondary"
-            loading={isPostingQuestion}
-          >
-            Ask
-          </Button>
-        </Form>
+        {({ values, setFieldValue }) => (
+          <Form>
+            <TextField name="title" label="Question title" className="mb-8" />
+            <TextField
+              name="description"
+              label="Question description"
+              multiline
+              className="mb-6"
+            />
+            <FormControlLabel
+              label="People from other schools can see my question"
+              classes={{ label: 'font-light' }}
+              control={
+                <Checkbox
+                  color="primary"
+                  checked={values.isPublic}
+                  onChange={e => setFieldValue('isPublic', e.target.checked)}
+                />
+              }
+              className="mb-6"
+            />
+            <Button
+              fullWidth
+              type="submit"
+              color="secondary"
+              loading={isPostingQuestion}
+            >
+              Ask
+            </Button>
+          </Form>
+        )}
       </Formik>
     </Dialog>
   )
