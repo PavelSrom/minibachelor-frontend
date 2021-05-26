@@ -12,7 +12,6 @@ import {
   Tooltip,
 } from '@material-ui/core'
 import Search from '@material-ui/icons/Search'
-import Close from '@material-ui/icons/Close'
 import ContactSupport from '@material-ui/icons/ContactSupport'
 import { useQuestions } from '../hooks/questions'
 import { QuestionList } from '../components/question-list'
@@ -27,16 +26,41 @@ import { schools } from '../utils/schools'
 export const Questions: React.FC = () => {
   const { user } = useAuth()
 
+  const [questionsToRender, setQuestionsToRender] = useState<QuestionDTO[]>([])
   const [detailOpen, setDetailOpen] = useState<QuestionDTO | undefined>()
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [school, setSchool] = useState<string>(user?.school ?? '')
+  const [search, setSearch] = useState<string>('')
+
+  const questionsQuery = useQuestions(
+    { school, programme: user?.programme },
+    {
+      enabled: !!user,
+    }
+  )
+
+  // filter questions by what is in search - title or description
+  useEffect(() => {
+    if (questionsQuery.data) {
+      if (!!search) {
+        setQuestionsToRender(
+          questionsQuery.data.filter(q => {
+            return (
+              q.title.toLowerCase().includes(search.toLowerCase()) ||
+              q.description.toLowerCase().includes(search.toLowerCase())
+            )
+          })
+        )
+      } else {
+        setQuestionsToRender(questionsQuery.data)
+      }
+    }
+  }, [questionsQuery.data, search])
 
   // correctly set 'school' text field value on first load
   useEffect(() => {
     if (user) setSchool(user?.school)
   }, [user])
-
-  const questionsQuery = useQuestions({ school, programme: user?.programme })
 
   return (
     <Container maxWidth="lg" className="py-8">
@@ -47,16 +71,15 @@ export const Questions: React.FC = () => {
           component="form"
           className="w-full max-w-md flex items-center p-1"
         >
-          <IconButton>
+          <IconButton disableRipple>
             <Search />
           </IconButton>
           <InputBase
             className="ml-2 flex-1"
             placeholder="Search questions..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
           />
-          <IconButton>
-            <Close />
-          </IconButton>
         </Paper>
 
         <div className="flex items-end space-x-4">
@@ -72,11 +95,19 @@ export const Questions: React.FC = () => {
             select={!!schools[school]}
             InputLabelProps={{ shrink: true }}
           >
-            {Object.keys(schools).map(school => (
-              <MenuItem key={school} value={school}>
-                {school}
-              </MenuItem>
-            ))}
+            {/* list only schools that offer the user's programme */}
+            {Object.entries(schools)
+              .filter(([_school, programmes]) => {
+                // prevent app crash if user is still loading
+                if (!user?.programme) return false
+
+                return programmes.includes(user?.programme)
+              })
+              .map(([school]) => (
+                <MenuItem key={school} value={school}>
+                  {school}
+                </MenuItem>
+              ))}
           </TextField>
           <TextField
             size="small"
@@ -102,7 +133,7 @@ export const Questions: React.FC = () => {
             })}
           >
             <QuestionList
-              questions={questionsQuery.data}
+              questions={questionsToRender}
               onDetailClick={q => setDetailOpen(q)}
               detailOpen={!!detailOpen}
             />
