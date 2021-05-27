@@ -54,9 +54,9 @@ export const UserDetail: React.FC = () => {
     colleague?.programme !== user?.programme
 
   return (
-    <Container maxWidth="lg" className="py-8 h-full flex flex-col">
+    <Container maxWidth="lg" className="py-8 min-h-screen flex flex-col">
       {detailQuery.isLoading && (
-        <div className="flex-1 justify-center items-center">
+        <div className="flex-1 flex justify-center items-center">
           <CircularProgress color="primary" />
         </div>
       )}
@@ -124,9 +124,7 @@ export const UserDetail: React.FC = () => {
                           ))}
                         </div>
                       ) : (
-                        <Text variant="body2">
-                          (There are no questions to show)
-                        </Text>
+                        <Text>(There are no questions to show)</Text>
                       )}
                     </>
                   )}

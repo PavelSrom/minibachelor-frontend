@@ -58,24 +58,37 @@ export const NewProjectModal: React.FC<Props> = ({ open, onClose }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form className="space-y-8">
-          <TextField name="title" label="Project title" />
-          <TextField
-            name="description"
-            label="Project description (optional)"
-            multiline
-          />
-          <TextField name="demoUrl" label="Demo URL" />
-          <TextField name="otherUrl" label="Other URL (optional)" />
-          <Button
-            fullWidth
-            type="submit"
-            color="secondary"
-            loading={isUploadingProject}
-          >
-            Upload
-          </Button>
-        </Form>
+        {({ values }) => (
+          <Form className="space-y-8">
+            <div>
+              <TextField
+                name="title"
+                label="Project title"
+                inputProps={{ maxLength: 80 }}
+              />
+              <div className="flex justify-end">
+                <Text variant="caption">
+                  {80 - values.title.length} characters left
+                </Text>
+              </div>
+            </div>
+            <TextField
+              name="description"
+              label="Project description (optional)"
+              multiline
+            />
+            <TextField name="demoUrl" label="Demo URL" />
+            <TextField name="otherUrl" label="Other URL (optional)" />
+            <Button
+              fullWidth
+              type="submit"
+              color="secondary"
+              loading={isUploadingProject}
+            >
+              Upload
+            </Button>
+          </Form>
+        )}
       </Formik>
     </Dialog>
   )

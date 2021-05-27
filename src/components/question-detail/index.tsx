@@ -50,7 +50,11 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
         <Paper className="p-6 sticky" style={{ top: 88 }}>
           <div className="flex justify-between items-start mb-4">
             <div className="flex">
-              <Avatar className="w-16 h-16" />
+              <Avatar className="w-16 h-16 text-3xl">
+                {question &&
+                  question?.userName[0].toUpperCase() +
+                    question?.userSurname[0].toUpperCase()}
+              </Avatar>
               <div className="ml-4">
                 <Text variant="h2">{question?.title}</Text>
                 <Text>
@@ -78,7 +82,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
                 )}
               </div>
             </div>
-            <div className="space-x-2">
+            <div className="space-x-2 flex">
               {question?.user === user?.id && (
                 <Tooltip title="Delete question">
                   <IconButton

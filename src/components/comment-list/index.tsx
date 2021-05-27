@@ -68,19 +68,17 @@ export const CommentList: React.FC<Props> = ({
                       </IconButton>
                     </Tooltip>
                   )}
-                  <Text>
+                  <Text variant="body2">
                     {formatDistanceToNow(new Date(comment.created_at)) + ' ago'}
                   </Text>
                 </div>
               </div>
-              <Text variant="body2">{comment.comment}</Text>
+              <Text>{comment.comment}</Text>
             </div>
           </div>
         ))
       ) : (
-        <Text variant="body2" className="mb-4">
-          (There are no comments)
-        </Text>
+        <Text className="mb-4">(There are no comments)</Text>
       )}
 
       <Formik

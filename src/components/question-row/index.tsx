@@ -24,7 +24,7 @@ export const QuestionRow: React.FC<Props> = memo(
             'md:col-span-11': detailOpen,
           })}
         >
-          <Text variant="body" className="font-semibold overflow-ellipsis">
+          <Text variant="body" className="font-semibold truncate">
             {question.title}
           </Text>
         </div>

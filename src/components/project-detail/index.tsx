@@ -51,7 +51,11 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
         <Paper className="p-6 sticky" style={{ top: 88 }}>
           <div className="flex justify-between items-start mb-4">
             <div className="flex">
-              <Avatar className="w-16 h-16" />
+              <Avatar className="w-16 h-16 text-3xl">
+                {project &&
+                  project?.userName[0].toUpperCase() +
+                    project?.userSurname[0].toUpperCase()}
+              </Avatar>
               <div className="ml-4">
                 <Text variant="h2">{project?.title}</Text>
                 <Text>
@@ -104,7 +108,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
                 </div>
               </div>
             </div>
-            <div className="space-x-2">
+            <div className="space-x-2 flex">
               {project?.user === user?.id && (
                 <Tooltip title="Delete project">
                   <IconButton
@@ -123,7 +127,11 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
             </div>
           </div>
 
-          <Text>{project?.description ?? '(No description)'}</Text>
+          <Text>
+            {project?.description
+              ? project.description
+              : '(No description provided)'}
+          </Text>
 
           <Text variant="h2" className="mt-8">
             Comments {commentsQuery.data && `(${commentsQuery.data.length})`}

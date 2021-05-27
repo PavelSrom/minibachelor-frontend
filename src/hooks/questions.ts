@@ -16,7 +16,16 @@ export const useQuestions = (
   useQuery(
     ['questions', filters.school, filters.programme, filters.user],
     () => getQuestions(filters),
-    options
+    {
+      ...options,
+      // sorting questions from newest to oldest
+      // this should be done on the back-end, but it's okay for this app
+      select: (data: QuestionDTO[]) =>
+        data.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        ),
+    }
   )
 
 export const useNewQuestion = () => {
