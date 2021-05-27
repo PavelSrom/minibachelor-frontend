@@ -87,7 +87,7 @@ export const QuestionList: React.FC<Props> = ({
         <Text>(No questions have been posted today)</Text>
       )}
 
-      <Text variant="h2" className="mt-8 mb-2">
+      <Text variant="h2" className="mt-12 mb-2">
         This week ({questionsThisWeek.length})
       </Text>
       {questionsThisWeek.length > 0 ? (
@@ -96,7 +96,7 @@ export const QuestionList: React.FC<Props> = ({
         <Text>(No questions have been posted this week)</Text>
       )}
 
-      <Text variant="h2" className="mt-8 mb-2">
+      <Text variant="h2" className="mt-12 mb-2">
         This month ({questionsThisMonth.length})
       </Text>
       {questionsThisMonth.length > 0 ? (
@@ -105,7 +105,7 @@ export const QuestionList: React.FC<Props> = ({
         <Text>(No questions have been posted this month)</Text>
       )}
 
-      <Text variant="h2" className="mt-8 mb-2">
+      <Text variant="h2" className="mt-12 mb-2">
         Older ({olderQuestions.length})
       </Text>
       {olderQuestions.length > 0 ? (

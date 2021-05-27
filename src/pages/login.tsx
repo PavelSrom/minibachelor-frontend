@@ -92,7 +92,7 @@ export const Login: React.FC = () => {
                 </Button>
                 <Text variant="body2" className="mt-2">
                   Do not have an account?{' '}
-                  <Link to="/register" className="underline">
+                  <Link to="/register" className="underline text-theme-primary">
                     Sign up
                   </Link>
                 </Text>
