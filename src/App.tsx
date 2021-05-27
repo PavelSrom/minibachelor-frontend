@@ -12,6 +12,7 @@ import { Login } from './pages/login'
 import { Projects } from './pages/projects'
 import { Questions } from './pages/questions'
 import { Register } from './pages/register'
+import { NotFound } from './pages/not-found'
 
 export const App: React.FC = () => {
   const { width } = useDevice()
@@ -32,6 +33,7 @@ export const App: React.FC = () => {
       <PrivateRoute exact path="/questions" component={Questions} />
       <PrivateRoute exact path="/projects" component={Projects} />
       <PrivateRoute exact path="/user/:id" component={UserDetail} />
+      <Route exact path="*" component={NotFound} />
     </Switch>
   )
 }

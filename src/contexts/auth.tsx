@@ -34,13 +34,9 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [user, setUser] = useState<UserDTO | null>(null)
 
-  console.log(user)
-
   const getProfile = async (email: string): Promise<void> => {
     try {
       const userData = await getUserProfile(email)
-      console.log('user data from request:')
-      console.log(userData)
       if (!user) setUser(userData)
     } catch (err) {
       enqueueSnackbar('Cannot fetch user data', { variant: 'error' })
