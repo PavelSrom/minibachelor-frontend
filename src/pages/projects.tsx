@@ -62,7 +62,12 @@ export const Projects: React.FC = () => {
   return (
     <Container maxWidth="lg" className="py-8">
       <Text variant="h1">People's projects</Text>
-      <Text className="mt-2 mb-16">Lorem ipsum</Text>
+      <div className="mt-2 mb-16">
+        <Text>
+          Hi{user?.name ? ` ${user.name}` : ''}, this is your projects overview
+          page
+        </Text>
+      </div>
       <div className="flex justify-between items-end">
         <Paper
           component="form"

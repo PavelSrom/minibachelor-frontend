@@ -35,13 +35,15 @@ export const MyClassmates: React.FC = () => {
                 onClick={() => history.push(`/user/${user.id}`)}
               >
                 <Avatar className="w-20 h-20 mb-4" />
-                <Text variant="h2">{user.username}</Text>
+                <Text variant="h2" className="truncate">
+                  {user.username}
+                </Text>
               </Paper>
             </div>
           ))}
         </div>
       ) : (
-        <Text variant="body2">(There are no classmates to show)</Text>
+        <Text>(There are no classmates to show)</Text>
       )}
     </>
   )

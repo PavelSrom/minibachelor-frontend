@@ -19,7 +19,7 @@ export const MyTeachers: React.FC = () => {
   if (teachersQuery.isError) return <p>Error :(</p>
 
   // filter out myself from the list
-  const teachers = teachersQuery.data?.filter(cm => cm.id !== user?.id)
+  const teachers = teachersQuery.data?.filter(t => t.id !== user?.id)
 
   return (
     <>
@@ -32,13 +32,15 @@ export const MyTeachers: React.FC = () => {
                 onClick={() => history.push(`/user/${user.id}`)}
               >
                 <Avatar className="w-20 h-20 mb-4" />
-                <Text variant="h2">{user.name + ' ' + user.surname}</Text>
+                <Text variant="h2" className="truncate">
+                  {user.username}
+                </Text>
               </Paper>
             </div>
           ))}
         </div>
       ) : (
-        <Text variant="body2">(There are no teachers to show)</Text>
+        <Text>(There are no teachers to show)</Text>
       )}
     </>
   )

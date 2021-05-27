@@ -67,7 +67,12 @@ export const Questions: React.FC = () => {
   return (
     <Container maxWidth="lg" className="py-8">
       <Text variant="h1">People's questions</Text>
-      <Text className="mt-2 mb-16">Lorem ipsum</Text>
+      <div className="mt-2 mb-16">
+        <Text>
+          Hi{user?.name ? ` ${user.name}` : ''}, this is your questions overview
+          page
+        </Text>
+      </div>
       <div className="flex justify-between items-end">
         <Paper
           component="form"
