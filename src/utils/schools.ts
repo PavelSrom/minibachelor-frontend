@@ -47,7 +47,7 @@ export const schools: Record<School, Programme[]> = {
     'International Sales & Marketing',
     'Service & Hospitality',
   ],
-  'Copenhagen Business Academy': [
+  'CPH Business Academy': [
     'Web Development',
     'Digital Concept Development',
     'Computer Science',

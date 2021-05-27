@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { IconButton, InputAdornment, MenuItem, Paper } from '@material-ui/core'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
@@ -42,23 +42,20 @@ export const Register: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [showPassword, setShowPassword] = useState(false)
-  const { isAuthenticated, register } = useAuth()
+  const { register } = useAuth()
 
   const handleSubmit = async (values: RegisterPayload): Promise<void> => {
     setIsSubmitting(true)
 
     try {
       await register(values)
-      enqueueSnackbar('Signed in', { variant: 'success' })
     } catch (err) {
-      enqueueSnackbar(err?.response?.data?.message || 'Unable to sign up', {
+      enqueueSnackbar(err?.response?.data?.email[0] || 'Unable to sign up', {
         variant: 'error',
       })
       setIsSubmitting(false)
     }
   }
-
-  if (isAuthenticated) return <Redirect to="/dashboard" />
 
   return (
     <section className="min-h-screen flex overflow-hidden">

@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [showPassword, setShowPassword] = useState(false)
-  const { isAuthenticated, login } = useAuth()
+  const { login, isAuthenticated } = useAuth()
 
   const handleSubmit = async (values: LoginPayload): Promise<void> => {
     setIsSubmitting(true)
@@ -38,7 +38,7 @@ export const Login: React.FC = () => {
       await login(values)
       enqueueSnackbar('Signed in', { variant: 'success' })
     } catch (err) {
-      enqueueSnackbar(err?.response?.data?.message || 'Unable to sign in', {
+      enqueueSnackbar(err?.response?.data?.detail || 'Unable to sign in', {
         variant: 'error',
       })
       setIsSubmitting(false)

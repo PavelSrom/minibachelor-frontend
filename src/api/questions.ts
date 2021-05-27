@@ -14,18 +14,18 @@ export const getQuestions = (
   })
 
   return axios
-    .get(`${API_CONFIG.BASE_URL}/questions?${query}`)
+    .get(`${API_CONFIG.BASE_URL}/questions/?${query}`)
     .then(({ data }) => data)
 }
 
 export const postQuestion = (
-  formData: NewQuestionPayload
+  formData: NewQuestionPayload & { user: number }
 ): Promise<QuestionDTO> =>
   axios
-    .post(`${API_CONFIG.BASE_URL}/questions`, formData)
+    .post(`${API_CONFIG.BASE_URL}/questions/`, formData)
     .then(({ data }) => data)
 
-export const deleteQuestion = (id: string): Promise<unknown> =>
+export const deleteQuestion = (id: number): Promise<unknown> =>
   axios
-    .delete(`${API_CONFIG.BASE_URL}/questions/${id}`)
+    .delete(`${API_CONFIG.BASE_URL}/questions/${id}/`)
     .then(({ data }) => data)

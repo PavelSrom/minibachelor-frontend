@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import clsx from 'clsx'
-import { Avatar, Container, Paper, Tabs, Tab, Divider } from '@material-ui/core'
+import {
+  Avatar,
+  Container,
+  Paper,
+  Tabs,
+  Tab,
+  Divider,
+  CircularProgress,
+} from '@material-ui/core'
 import { Text } from '../styleguide'
 import { useQuestions } from '../hooks/questions'
 import { useAuth } from '../contexts/auth'
@@ -24,32 +32,36 @@ export const UserDetail: React.FC = () => {
   const [pDetailOpen, setPDetailOpen] = useState<ProjectDTO | undefined>()
   const [tabValue, setTabValue] = useState<0 | 1>(QUESTIONS)
 
-  const detailQuery = useColleagueDetail(params.id, {
+  const detailQuery = useColleagueDetail(+params.id, {
     enabled: !!params.id,
   })
 
   const questionsQuery = useQuestions(
-    { user: params.id },
     {
-      enabled: tabValue === QUESTIONS,
-    }
+      user: +params.id,
+      // if the person is not from my school, only fetch their public questions
+      isPublic: user?.school !== detailQuery.data?.school ? 'True' : null,
+    },
+    // only fire request if we have user's details data and tab is questions
+    { enabled: !!detailQuery.data && tabValue === QUESTIONS }
   )
   const projectsQuery = useProjects(
-    { user: params.id },
+    { user: +params.id },
     { enabled: tabValue === PROJECTS }
   )
 
   const { data: colleague } = detailQuery
 
-  // cannot view projects if not person from same school AND programme
-  const cannotViewProjects =
-    colleague &&
-    colleague.school !== user?.school &&
-    colleague?.programme !== user?.programme
+  // cannot view projects if not person from same school
+  const cannotViewProjects = colleague && colleague.school !== user?.school
 
   return (
-    <Container maxWidth="lg" className="py-8">
-      {detailQuery.isLoading && <p>Loading...</p>}
+    <Container maxWidth="lg" className="py-8 min-h-screen flex flex-col">
+      {detailQuery.isLoading && (
+        <div className="flex-1 flex justify-center items-center">
+          <CircularProgress color="primary" />
+        </div>
+      )}
       {detailQuery.isError && <p>Error :(</p>}
 
       {detailQuery.isSuccess && colleague && (
@@ -105,9 +117,8 @@ export const UserDetail: React.FC = () => {
                       {questionsQuery.data.length > 0 ? (
                         <div className="space-y-6">
                           {questionsQuery.data.map(q => (
-                            // TODO: adjust what info the row shows
                             <QuestionRow
-                              key={q._id}
+                              key={q.id}
                               question={q}
                               detailOpen={!!qDetailOpen}
                               onDetailClick={() => setQDetailOpen(q)}
@@ -115,9 +126,7 @@ export const UserDetail: React.FC = () => {
                           ))}
                         </div>
                       ) : (
-                        <Text variant="body2">
-                          (There are no questions to show)
-                        </Text>
+                        <Text>(There are no questions to show)</Text>
                       )}
                     </>
                   )}
@@ -135,7 +144,7 @@ export const UserDetail: React.FC = () => {
                         <div className="grid grid-cols-12 gap-6">
                           {projectsQuery.data.map(project => (
                             <div
-                              key={project._id}
+                              key={project.id}
                               className={clsx({
                                 'col-span-6': !pDetailOpen,
                                 'col-span-12': pDetailOpen,

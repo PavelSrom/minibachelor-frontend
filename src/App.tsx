@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import axios from 'axios'
 import { Switch, Route } from 'react-router-dom'
 import { PrivateRoute } from './hoc/private-route'
 import { useDevice } from './hooks/use-device'
@@ -10,9 +12,15 @@ import { Login } from './pages/login'
 import { Projects } from './pages/projects'
 import { Questions } from './pages/questions'
 import { Register } from './pages/register'
+import { NotFound } from './pages/not-found'
 
 export const App: React.FC = () => {
   const { width } = useDevice()
+
+  // remove axios token on app load, otherwise causes bugs on API
+  useEffect(() => {
+    delete axios.defaults.headers['Authorization']
+  }, [])
 
   if (width < 1024) return <OnlyDesktop />
 
@@ -25,6 +33,7 @@ export const App: React.FC = () => {
       <PrivateRoute exact path="/questions" component={Questions} />
       <PrivateRoute exact path="/projects" component={Projects} />
       <PrivateRoute exact path="/user/:id" component={UserDetail} />
+      <Route exact path="*" component={NotFound} />
     </Switch>
   )
 }

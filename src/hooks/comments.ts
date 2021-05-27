@@ -6,12 +6,18 @@ import {
   UseQueryOptions,
 } from 'react-query'
 import { deleteComment, getComments, postComment } from '../api/comments'
+import { CommentFilters } from '../types'
 import { CommentDTO } from '../types/api'
 
 export const useComments = (
-  entityId: string,
+  filters: CommentFilters,
   options?: UseQueryOptions<CommentDTO[]>
-) => useQuery(['comments', entityId], () => getComments(entityId), options)
+) =>
+  useQuery(
+    ['comments', filters.questionId, filters.projectId],
+    () => getComments(filters),
+    options
+  )
 
 export const useNewComment = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -24,8 +30,12 @@ export const useNewComment = () => {
     onError: () => {
       enqueueSnackbar('Cannot add comment', { variant: 'error' })
     },
-    onSettled: (_data, _error, { entityId }) => {
-      queryClient.invalidateQueries(['comments', entityId])
+    onSettled: (_data, _error, { filters }) => {
+      queryClient.invalidateQueries([
+        'comments',
+        filters.questionId,
+        filters.projectId,
+      ])
     },
   })
 }
@@ -41,8 +51,8 @@ export const useDeleteComment = () => {
     onError: () => {
       enqueueSnackbar('Cannot delete comment', { variant: 'error' })
     },
-    onSettled: (_data, _error, { entityId }) => {
-      queryClient.invalidateQueries(['comments', entityId])
+    onSettled: () => {
+      queryClient.invalidateQueries('comments')
     },
   })
 }

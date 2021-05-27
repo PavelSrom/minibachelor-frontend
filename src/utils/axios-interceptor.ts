@@ -36,7 +36,7 @@ axios.interceptors.request.use(
 
     if (accessToken) {
       // eslint-disable-next-line no-param-reassign
-      config.headers.common['x-auth-token'] = accessToken
+      config.headers.common['Authorization'] = `Bearer ${accessToken}`
     }
 
     return config

@@ -31,11 +31,12 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
 
   const { mutateAsync: deleteQuestion, isLoading: isDeletingQuestion } =
     useDeleteQuestion()
-  const commentsQuery = useComments(question?._id || '', {
-    enabled: !!question?._id,
-  })
+  const commentsQuery = useComments(
+    { questionId: question?.id ?? 0 },
+    { enabled: !!question?.id }
+  )
 
-  const notMyQuestion = user?._id !== question?.userId
+  const notMyQuestion = user?.id !== question?.user
 
   return (
     <Grow in={!!question}>
@@ -49,7 +50,11 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
         <Paper className="p-6 sticky" style={{ top: 88 }}>
           <div className="flex justify-between items-start mb-4">
             <div className="flex">
-              <Avatar className="w-16 h-16" />
+              <Avatar className="w-16 h-16 text-3xl">
+                {question &&
+                  question?.userName[0].toUpperCase() +
+                    question?.userSurname[0].toUpperCase()}
+              </Avatar>
               <div className="ml-4">
                 <Text variant="h2">{question?.title}</Text>
                 <Text>
@@ -60,22 +65,25 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
                     })}
                     onClick={() =>
                       notMyQuestion
-                        ? history.push(`/user/${question?.userId}`)
+                        ? history.push(`/user/${question?.user}`)
                         : null
                     }
                   >
                     {question?.userName} {question?.userSurname}
                   </span>
                 </Text>
-                {question?.createdAt && (
+                {question?.created_at && (
                   <Text variant="body2">
-                    {format(new Date(question!.createdAt), 'dd.MM.yyyy, HH:mm')}
+                    {format(
+                      new Date(question!.created_at),
+                      'dd.MM.yyyy, HH:mm'
+                    )}
                   </Text>
                 )}
               </div>
             </div>
-            <div className="space-x-2">
-              {question?.userId === user?._id && (
+            <div className="space-x-2 flex">
+              {question?.user === user?.id && (
                 <Tooltip title="Delete question">
                   <IconButton
                     size="small"
@@ -104,7 +112,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
 
           {commentsQuery.isSuccess && commentsQuery.data && (
             <CommentList
-              entityId={question!._id}
+              questionId={question!.id}
               comments={commentsQuery.data}
             />
           )}
@@ -114,7 +122,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
           open={deleteDialogOpen}
           onClose={() => setDeleteDialogOpen(false)}
           onConfirm={() =>
-            deleteQuestion(question!._id).finally(() => {
+            deleteQuestion(question!.id).finally(() => {
               setDeleteDialogOpen(false)
               onClose()
             })

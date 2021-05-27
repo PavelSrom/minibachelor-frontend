@@ -24,7 +24,7 @@ export const QuestionRow: React.FC<Props> = memo(
             'md:col-span-11': detailOpen,
           })}
         >
-          <Text variant="body" className="font-semibold overflow-ellipsis">
+          <Text variant="body" className="font-semibold truncate">
             {question.title}
           </Text>
         </div>
@@ -47,7 +47,7 @@ export const QuestionRow: React.FC<Props> = memo(
           })}
         >
           <Text variant="body2">
-            {format(new Date(question.createdAt), 'dd.MM.yyyy, HH:mm')}
+            {format(new Date(question.created_at), 'dd.MM.yyyy, HH:mm')}
           </Text>
         </div>
 

@@ -7,6 +7,7 @@ import {
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useAuth } from '../../contexts/auth'
 import { useNewQuestion } from '../../hooks/questions'
 import { Text, TextField, Button } from '../../styleguide'
 import { NewQuestionPayload } from '../../types/payloads'
@@ -34,11 +35,12 @@ export const NewQuestionModal: React.FC<Props> = ({
   onClose,
   onCreated,
 }) => {
+  const { user } = useAuth()
   const { mutateAsync: postQuestion, isLoading: isPostingQuestion } =
     useNewQuestion()
 
   const handleSubmit = (values: NewQuestionPayload): void => {
-    postQuestion(values).then(() => {
+    postQuestion({ ...values, user: user!.id }).then(() => {
       onCreated?.()
       onClose()
     })
@@ -66,7 +68,18 @@ export const NewQuestionModal: React.FC<Props> = ({
       >
         {({ values, setFieldValue }) => (
           <Form>
-            <TextField name="title" label="Question title" className="mb-8" />
+            <div className="mb-8">
+              <TextField
+                name="title"
+                label="Question title"
+                inputProps={{ maxLength: 80 }}
+              />
+              <div className="flex justify-end">
+                <Text variant="caption">
+                  {80 - values.title.length} characters left
+                </Text>
+              </div>
+            </div>
             <TextField
               name="description"
               label="Question description"

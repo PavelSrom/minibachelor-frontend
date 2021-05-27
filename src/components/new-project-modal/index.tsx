@@ -2,6 +2,7 @@ import { Dialog, IconButton } from '@material-ui/core'
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useAuth } from '../../contexts/auth'
 import { useNewProject } from '../../hooks/projects'
 import { Text, TextField, Button } from '../../styleguide'
 import { NewProjectPayload } from '../../types/payloads'
@@ -29,11 +30,12 @@ type Props = {
 }
 
 export const NewProjectModal: React.FC<Props> = ({ open, onClose }) => {
+  const { user } = useAuth()
   const { mutateAsync: uploadProject, isLoading: isUploadingProject } =
     useNewProject()
 
   const handleSubmit = (values: NewProjectPayload): void => {
-    uploadProject(values).then(() => onClose())
+    uploadProject({ ...values, user: user!.id }).then(() => onClose())
   }
 
   return (
@@ -56,24 +58,37 @@ export const NewProjectModal: React.FC<Props> = ({ open, onClose }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form className="space-y-8">
-          <TextField name="title" label="Project title" />
-          <TextField
-            name="description"
-            label="Project description (optional)"
-            multiline
-          />
-          <TextField name="demoUrl" label="Demo URL" />
-          <TextField name="otherUrl" label="Other URL (optional)" />
-          <Button
-            fullWidth
-            type="submit"
-            color="secondary"
-            loading={isUploadingProject}
-          >
-            Upload
-          </Button>
-        </Form>
+        {({ values }) => (
+          <Form className="space-y-8">
+            <div>
+              <TextField
+                name="title"
+                label="Project title"
+                inputProps={{ maxLength: 80 }}
+              />
+              <div className="flex justify-end">
+                <Text variant="caption">
+                  {80 - values.title.length} characters left
+                </Text>
+              </div>
+            </div>
+            <TextField
+              name="description"
+              label="Project description (optional)"
+              multiline
+            />
+            <TextField name="demoUrl" label="Demo URL" />
+            <TextField name="otherUrl" label="Other URL (optional)" />
+            <Button
+              fullWidth
+              type="submit"
+              color="secondary"
+              loading={isUploadingProject}
+            >
+              Upload
+            </Button>
+          </Form>
+        )}
       </Formik>
     </Dialog>
   )

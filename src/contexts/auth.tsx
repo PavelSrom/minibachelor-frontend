@@ -1,24 +1,21 @@
-import { createContext, useContext, useState, useEffect, useMemo } from 'react'
-import { Backdrop, CircularProgress } from '@material-ui/core'
+import { createContext, useContext, useState, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useQueryClient } from 'react-query'
 import { UserDTO } from '../types/api'
 import { LoginPayload, RegisterPayload } from '../types/payloads'
 import {
-  refreshToken,
   registerUser,
   loginUser,
   deleteUser,
   getUserProfile,
 } from '../api/auth'
 
-type AuthStatus = 'pending' | 'settled'
-
 type ContextProps = {
   isAuthenticated: boolean
   user: UserDTO | null
-  getProfile: () => Promise<void>
+  email: string
+  getProfile: (email: string) => Promise<void>
   register: (formData: RegisterPayload) => Promise<void>
   login: (formData: LoginPayload) => Promise<void>
   logout: () => void
@@ -33,85 +30,58 @@ export const AuthProvider: React.FC = ({ children }) => {
   const history = useHistory()
 
   // auth state
-  const [status, setStatus] = useState<AuthStatus>('pending')
+  const [email, setEmail] = useState<string>('')
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [user, setUser] = useState<UserDTO | null>(null)
 
-  const getProfile = async (): Promise<void> => {
+  const getProfile = async (email: string): Promise<void> => {
     try {
-      const userData = await getUserProfile()
-      setUser(userData)
+      const userData = await getUserProfile(email)
+      if (!user) setUser(userData)
     } catch (err) {
       enqueueSnackbar('Cannot fetch user data', { variant: 'error' })
     }
   }
 
   const register = async (formData: RegisterPayload): Promise<void> => {
-    const { token } = await registerUser(formData)
-
-    localStorage.setItem('x-auth-token', token)
-    setIsAuthenticated(true)
-    setStatus('settled')
+    await registerUser(formData)
+    enqueueSnackbar('Successfully registered, please log in', {
+      variant: 'success',
+    })
+    history.push('/login')
   }
 
   const login = async (formData: LoginPayload): Promise<void> => {
-    const { token } = await loginUser(formData)
+    const { access: accessToken } = await loginUser(formData)
 
-    localStorage.setItem('x-auth-token', token)
+    localStorage.setItem('x-auth-token', accessToken)
     setIsAuthenticated(true)
-    setStatus('settled')
+    setEmail(formData.email)
   }
 
   const logout = (): void => {
     localStorage.removeItem('x-auth-token')
     queryClient.clear()
     setIsAuthenticated(false)
-    setStatus('settled')
     setUser(null)
     history.push('/login')
   }
 
   const deleteAccount = async (): Promise<void> => {
     try {
-      await deleteUser()
+      await deleteUser(user!.id)
+      enqueueSnackbar('Account deleted', { variant: 'success' })
       logout()
     } catch (err) {
       enqueueSnackbar('Cannot delete user profile', { variant: 'error' })
     }
   }
 
-  const loginFromToken = async (): Promise<void> => {
-    try {
-      const { token } = await refreshToken()
-
-      localStorage.setItem('x-auth-token', token)
-      setIsAuthenticated(true)
-      setStatus('settled')
-      enqueueSnackbar('Signed in', { variant: 'success' })
-    } catch (err) {
-      enqueueSnackbar('Session expired', { variant: 'warning' })
-      logout()
-    }
-  }
-
-  // automatically login from token on mount
-  useEffect(() => {
-    const token: string | null = localStorage.getItem('x-auth-token')
-
-    if (token) {
-      loginFromToken()
-    } else {
-      setIsAuthenticated(false)
-      setStatus('settled')
-    }
-
-    // eslint-disable-next-line
-  }, [])
-
   const value: ContextProps = useMemo(
     () => ({
       isAuthenticated,
       user,
+      email,
       getProfile,
       register,
       login,
@@ -119,20 +89,10 @@ export const AuthProvider: React.FC = ({ children }) => {
       deleteAccount,
     }),
     // eslint-disable-next-line
-    [isAuthenticated, user]
+    [isAuthenticated, user, email]
   )
 
-  return (
-    <AuthContext.Provider value={value}>
-      {status === 'pending' ? (
-        <Backdrop open style={{ color: '#fff' }}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      ) : (
-        children
-      )}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = (): ContextProps => {

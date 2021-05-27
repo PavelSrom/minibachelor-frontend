@@ -41,15 +41,14 @@ const useStyles = makeStyles<Theme>(theme => ({
 
 export const WithLayout: React.FC = ({ children }) => {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
-  const { user, getProfile, logout } = useAuth()
+  const { user, email, getProfile, logout } = useAuth()
   const classes = useStyles()
   const location = useLocation()
 
   useEffect(() => {
-    getProfile()
-
+    if (email) getProfile(email)
     // eslint-disable-next-line
-  }, [])
+  }, [email])
 
   const currentPage = navbarPages.find(page => page.url === location.pathname)
 
@@ -141,7 +140,7 @@ export const WithLayout: React.FC = ({ children }) => {
           </Drawer>
         </Hidden>
       </nav>
-      <main className="flex-grow">
+      <main className="flex-grow min-h-screen">
         <div className={classes.toolbar} />
         {children}
       </main>
