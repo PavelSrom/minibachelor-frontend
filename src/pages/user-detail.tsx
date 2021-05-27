@@ -37,8 +37,13 @@ export const UserDetail: React.FC = () => {
   })
 
   const questionsQuery = useQuestions(
-    { user: +params.id },
-    { enabled: tabValue === QUESTIONS }
+    {
+      user: +params.id,
+      // if the person is not from my school, only fetch their public questions
+      isPublic: user?.school !== detailQuery.data?.school ? 'True' : null,
+    },
+    // only fire request if we have user's details data and tab is questions
+    { enabled: !!detailQuery.data && tabValue === QUESTIONS }
   )
   const projectsQuery = useProjects(
     { user: +params.id },
@@ -47,11 +52,8 @@ export const UserDetail: React.FC = () => {
 
   const { data: colleague } = detailQuery
 
-  // cannot view projects if not person from same school AND programme
-  const cannotViewProjects =
-    colleague &&
-    colleague.school !== user?.school &&
-    colleague?.programme !== user?.programme
+  // cannot view projects if not person from same school
+  const cannotViewProjects = colleague && colleague.school !== user?.school
 
   return (
     <Container maxWidth="lg" className="py-8 min-h-screen flex flex-col">
