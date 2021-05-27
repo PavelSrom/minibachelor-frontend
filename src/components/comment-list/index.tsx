@@ -11,16 +11,21 @@ import { NewCommentPayload } from '../../types/payloads'
 import { useAuth } from '../../contexts/auth'
 
 const validationSchema = Yup.object().shape({
-  text: Yup.string().required('This field is required'),
+  comment: Yup.string().required('This field is required'),
 })
 
 type Props = {
-  entityId: string
   comments: CommentDTO[]
+  questionId?: number
+  projectId?: number
 }
 
-export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
-  const [comIdToDelete, setComIdToDelete] = useState<string | undefined>()
+export const CommentList: React.FC<Props> = ({
+  questionId,
+  projectId,
+  comments,
+}) => {
+  const [comIdToDelete, setComIdToDelete] = useState<number | undefined>()
   const { user } = useAuth()
 
   const { mutateAsync: addComment, isLoading } = useNewComment()
@@ -30,14 +35,19 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
     values: NewCommentPayload,
     { resetForm }: FormikHelpers<NewCommentPayload>
   ): void => {
-    addComment({ entityId, formData: values }).finally(() => resetForm())
+    addComment({
+      filters: { questionId, projectId },
+      formData: { ...values, user: user!.id },
+    }).finally(() => resetForm())
   }
+
+  console.log(comments)
 
   return (
     <>
       {comments.length > 0 ? (
         comments.map(comment => (
-          <div key={comment._id} className="flex mb-6">
+          <div key={comment.id} className="flex mb-6">
             <Avatar className="w-10 h-10">
               {comment.userName[0].toUpperCase() +
                 comment.userSurname[0].toUpperCase()}
@@ -48,38 +58,36 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
                   {comment.userName + ' ' + comment.userSurname}
                 </Text>
                 <div className="flex items-center space-x-2">
-                  {user?._id === comment.userId && (
+                  {user?.id === comment.user && (
                     <Tooltip title="Delete this comment">
                       <IconButton
                         className="p-0"
-                        onClick={() => setComIdToDelete(comment._id)}
+                        onClick={() => setComIdToDelete(comment.id)}
                       >
                         <Delete />
                       </IconButton>
                     </Tooltip>
                   )}
-                  <Text>
-                    {formatDistanceToNow(new Date(comment.createdAt)) + ' ago'}
+                  <Text variant="body2">
+                    {formatDistanceToNow(new Date(comment.created_at)) + ' ago'}
                   </Text>
                 </div>
               </div>
-              <Text variant="body2">{comment.text}</Text>
+              <Text>{comment.comment}</Text>
             </div>
           </div>
         ))
       ) : (
-        <Text variant="body2" className="mb-4">
-          (There are no comments)
-        </Text>
+        <Text className="mb-4">(There are no comments)</Text>
       )}
 
       <Formik
-        initialValues={{ text: '' }}
+        initialValues={{ comment: '' }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         <Form>
-          <TextField name="text" label="Text" multiline rowsMax={4} />
+          <TextField name="comment" label="Text" multiline rowsMax={4} />
           <div className="mt-2 flex justify-end">
             <Button type="submit" loading={isLoading} color="secondary">
               Add comment
@@ -92,7 +100,7 @@ export const CommentList: React.FC<Props> = ({ entityId, comments }) => {
         open={!!comIdToDelete}
         onClose={() => setComIdToDelete(undefined)}
         onConfirm={() =>
-          deleteComment({ entityId, commentId: comIdToDelete! }).finally(() =>
+          deleteComment(comIdToDelete!).finally(() =>
             setComIdToDelete(undefined)
           )
         }

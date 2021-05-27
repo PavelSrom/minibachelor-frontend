@@ -12,16 +12,18 @@ export const getProjects = (filters: ProjectFilters): Promise<ProjectDTO[]> => {
   })
 
   return axios
-    .get(`${API_CONFIG.BASE_URL}/projects?${query}`)
+    .get(`${API_CONFIG.BASE_URL}/projects/?${query}`)
     .then(({ data }) => data)
 }
 
 export const uploadProject = (
-  formData: NewProjectPayload
+  formData: NewProjectPayload & { user: number }
 ): Promise<ProjectDTO> =>
   axios
-    .post(`${API_CONFIG.BASE_URL}/projects`, formData)
+    .post(`${API_CONFIG.BASE_URL}/projects/`, formData)
     .then(({ data }) => data)
 
-export const deleteProject = (id: string): Promise<unknown> =>
-  axios.delete(`${API_CONFIG.BASE_URL}/projects/${id}`).then(({ data }) => data)
+export const deleteProject = (id: number): Promise<unknown> =>
+  axios
+    .delete(`${API_CONFIG.BASE_URL}/projects/${id}/`)
+    .then(({ data }) => data)

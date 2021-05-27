@@ -16,7 +16,16 @@ export const useProjects = (
   useQuery(
     ['projects', filters.programme, filters.school, filters.user],
     () => getProjects(filters),
-    options
+    {
+      ...options,
+      // sorting projects from newest to oldest
+      // this should be done on the back-end, but it's okay for this app
+      select: (data: ProjectDTO[]) =>
+        data.sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        ),
+    }
   )
 
 export const useNewProject = () => {

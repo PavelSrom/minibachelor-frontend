@@ -1,7 +1,13 @@
-import { Dialog, IconButton } from '@material-ui/core'
+import {
+  Dialog,
+  IconButton,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core'
 import Close from '@material-ui/icons/Close'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useAuth } from '../../contexts/auth'
 import { useNewQuestion } from '../../hooks/questions'
 import { Text, TextField, Button } from '../../styleguide'
 import { NewQuestionPayload } from '../../types/payloads'
@@ -29,11 +35,12 @@ export const NewQuestionModal: React.FC<Props> = ({
   onClose,
   onCreated,
 }) => {
+  const { user } = useAuth()
   const { mutateAsync: postQuestion, isLoading: isPostingQuestion } =
     useNewQuestion()
 
   const handleSubmit = (values: NewQuestionPayload): void => {
-    postQuestion(values).then(() => {
+    postQuestion({ ...values, user: user!.id }).then(() => {
       onCreated?.()
       onClose()
     })
@@ -59,22 +66,48 @@ export const NewQuestionModal: React.FC<Props> = ({
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form className="space-y-8">
-          <TextField name="title" label="Question title" />
-          <TextField
-            name="description"
-            label="Question description"
-            multiline
-          />
-          <Button
-            fullWidth
-            type="submit"
-            color="secondary"
-            loading={isPostingQuestion}
-          >
-            Ask
-          </Button>
-        </Form>
+        {({ values, setFieldValue }) => (
+          <Form>
+            <div className="mb-8">
+              <TextField
+                name="title"
+                label="Question title"
+                inputProps={{ maxLength: 80 }}
+              />
+              <div className="flex justify-end">
+                <Text variant="caption">
+                  {80 - values.title.length} characters left
+                </Text>
+              </div>
+            </div>
+            <TextField
+              name="description"
+              label="Question description"
+              multiline
+              className="mb-6"
+            />
+            <FormControlLabel
+              label="People from other schools can see my question"
+              classes={{ label: 'font-light' }}
+              control={
+                <Checkbox
+                  color="primary"
+                  checked={values.isPublic}
+                  onChange={e => setFieldValue('isPublic', e.target.checked)}
+                />
+              }
+              className="mb-6"
+            />
+            <Button
+              fullWidth
+              type="submit"
+              color="secondary"
+              loading={isPostingQuestion}
+            >
+              Ask
+            </Button>
+          </Form>
+        )}
       </Formik>
     </Dialog>
   )

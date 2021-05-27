@@ -13,9 +13,9 @@ export const MyQuestions: React.FC = () => {
   const { user } = useAuth()
 
   const questionsQuery = useQuestions(
-    { user: user?._id },
+    { user: user?.id },
     {
-      enabled: !!user?._id,
+      enabled: !!user?.id,
     }
   )
 
@@ -34,9 +34,8 @@ export const MyQuestions: React.FC = () => {
         {questionsQuery.data!.length > 0 ? (
           <div className="space-y-6">
             {questionsQuery.data!.map(q => (
-              // TODO: adjust what info the row shows
               <QuestionRow
-                key={q._id}
+                key={q.id}
                 question={q}
                 detailOpen={!!detailOpen}
                 onDetailClick={() => setDetailOpen(q)}

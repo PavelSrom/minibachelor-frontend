@@ -24,8 +24,14 @@ export const ProjectCard: React.FC<Props> = memo(
     return (
       <Card>
         <CardContent>
-          <Text variant="h2">{project.title}</Text>
-          <Text>{project.description ?? '(No description provided)'}</Text>
+          <Text variant="h2" className="truncate">
+            {project.title}
+          </Text>
+          <Text className="truncate">
+            {project.description
+              ? project.description
+              : '(No description provided)'}
+          </Text>
         </CardContent>
         <CardActions className="flex justify-between">
           <div className="flex items-center">

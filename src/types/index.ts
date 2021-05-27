@@ -4,7 +4,7 @@ export type School =
   | 'VIA University College'
   | 'Business Academy South West'
   | 'Copenhagen School of Technology'
-  | 'Copenhagen Business Academy'
+  | 'CPH Business Academy'
 
 export type Programme =
   // IT + design
@@ -25,11 +25,24 @@ export type Programme =
 export type QuestionFilters = {
   school?: string
   programme?: string
-  user?: string
+  user?: number
+  isPublic?: 'True' | null // so that queryString can remove null
 }
 
 export type ProjectFilters = {
   school?: string
   programme?: string
-  user?: string
+  user?: number
+}
+
+export type UserFilters = {
+  role: 'student' | 'teacher'
+  school?: string
+  programme?: string
+  id?: number
+}
+
+export type CommentFilters = {
+  questionId?: number | null
+  projectId?: number | null
 }
