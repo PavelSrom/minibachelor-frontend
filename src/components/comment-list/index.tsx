@@ -41,8 +41,6 @@ export const CommentList: React.FC<Props> = ({
     }).finally(() => resetForm())
   }
 
-  console.log(comments)
-
   return (
     <>
       {comments.length > 0 ? (
