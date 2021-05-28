@@ -61,7 +61,7 @@ export const QuestionDetail: React.FC<Props> = ({ question, onClose }) => {
                   by{' '}
                   <span
                     className={clsx('font-semibold', {
-                      'cursor-pointer': notMyQuestion,
+                      'cursor-pointer underline': notMyQuestion,
                     })}
                     onClick={() =>
                       notMyQuestion

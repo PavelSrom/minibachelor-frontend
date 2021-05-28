@@ -150,7 +150,7 @@ export const Register: React.FC = () => {
                   </Button>
                   <Text variant="body2" className="mt-2">
                     Already have an account?{' '}
-                    <Link to="/login" className="underline">
+                    <Link to="/login" className="underline text-theme-primary">
                       Sign in
                     </Link>
                   </Text>

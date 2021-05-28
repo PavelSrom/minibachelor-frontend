@@ -62,7 +62,7 @@ export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
                   by{' '}
                   <span
                     className={clsx('font-semibold', {
-                      'cursor-pointer': notMyProject,
+                      'cursor-pointer underline': notMyProject,
                     })}
                     onClick={() =>
                       notMyProject

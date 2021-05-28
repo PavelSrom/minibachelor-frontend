@@ -56,7 +56,11 @@ export const UserDetail: React.FC = () => {
   const cannotViewProjects = colleague && colleague.school !== user?.school
 
   return (
-    <Container maxWidth="lg" className="py-8 min-h-screen flex flex-col">
+    <Container
+      maxWidth="lg"
+      className="py-8 flex flex-col"
+      style={{ minHeight: 'calc(100vh - 64px)' }}
+    >
       {detailQuery.isLoading && (
         <div className="flex-1 flex justify-center items-center">
           <CircularProgress color="primary" />
