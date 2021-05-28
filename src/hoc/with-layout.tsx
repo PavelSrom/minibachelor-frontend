@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import clsx from 'clsx'
 import {
   List,
@@ -44,6 +44,7 @@ export const WithLayout: React.FC = ({ children }) => {
   const { user, email, getProfile, logout } = useAuth()
   const classes = useStyles()
   const location = useLocation()
+  const history = useHistory()
 
   useEffect(() => {
     if (email) getProfile(email)
@@ -54,7 +55,14 @@ export const WithLayout: React.FC = ({ children }) => {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <div className={clsx(classes.toolbar, 'p-2')}>
+        <img
+          src="64x64.png"
+          alt="app_logo.png"
+          className="w-12 h-12 mx-auto cursor-pointer"
+          onClick={() => history.push('/')}
+        />
+      </div>
       <Divider />
       <List className="pt-0">
         {navbarPages.map(({ url, label, icon: Icon }) => {
